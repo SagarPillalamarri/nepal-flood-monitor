@@ -2,8 +2,8 @@
 from datetime import date, timedelta
 import pandas as pd
 import streamlit as st
-import config as c
-from stage5_replay import prepare_replay
+from floodwatch.core import config as c
+from floodwatch.dashboard.stage5_replay import prepare_replay
 
 st.set_page_config(page_title='Bagmati flood replay', page_icon='🌧️', layout='wide')
 replay_tab, pipeline_tab, monitor_tab = st.tabs(['September 2024 replay', 'Big data pipeline', 'Live monitor'])
@@ -60,9 +60,9 @@ with replay_tab:
         st.dataframe(replay.reset_index(), width='stretch', hide_index=True)
 
 with pipeline_tab:
-    from spark_dashboard import render_pipeline
+    from floodwatch.dashboard.spark_dashboard import render_pipeline
     render_pipeline()
 
 with monitor_tab:
-    from live_monitor import render_monitor
+    from floodwatch.dashboard.live_monitor import render_monitor
     render_monitor()

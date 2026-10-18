@@ -1,0 +1,523 @@
+{
+  "modules": {
+    "config": "floodwatch.core.config",
+    "features": "floodwatch.core.features",
+    "targets": "floodwatch.core.targets",
+    "stage5_replay": "floodwatch.dashboard.stage5_replay",
+    "spark_dashboard": "floodwatch.dashboard.spark_dashboard",
+    "live_monitor": "floodwatch.dashboard.live_monitor",
+    "observed_monitor": "floodwatch.dashboard.observed_monitor",
+    "spark_dashboard_integrity": "floodwatch.dashboard.spark_dashboard_integrity",
+    "stage1_fetch": "floodwatch.pipeline.stage1_fetch",
+    "stage1b_fetch": "floodwatch.pipeline.stage1b_fetch",
+    "stage2_analysis": "floodwatch.pipeline.stage2_analysis",
+    "stage3_models": "floodwatch.pipeline.stage3_models",
+    "stage3_calendar_ablation": "floodwatch.pipeline.stage3_calendar_ablation",
+    "stage4_analogues": "floodwatch.pipeline.stage4_analogues",
+    "stage_sat_fetch": "floodwatch.pipeline.stage_sat_fetch",
+    "stage1b_check": "floodwatch.checks.stage1b_check",
+    "stage3_calendar_check": "floodwatch.checks.stage3_calendar_check",
+    "stage_live_check": "floodwatch.checks.stage_live_check",
+    "stage1_check": "floodwatch.checks.stage1_check",
+    "stage_sat_check": "floodwatch.checks.stage_sat_check",
+    "stage_spark_dashboard_check": "floodwatch.checks.stage_spark_dashboard_check",
+    "stage5_check": "floodwatch.checks.stage5_check",
+    "stage4_check": "floodwatch.checks.stage4_check",
+    "stage2_check": "floodwatch.checks.stage2_check",
+    "stage3_check": "floodwatch.checks.stage3_check",
+    "stage_spark_check": "floodwatch.checks.stage_spark_check",
+    "spark_runtime": "floodwatch.spark.spark_runtime",
+    "spark_pipeline": "floodwatch.spark.spark_pipeline",
+    "spark_fetch_hourly": "floodwatch.spark.spark_fetch_hourly",
+    "spark_rain_diagnosis": "floodwatch.spark.spark_rain_diagnosis",
+    "spark_scaling": "floodwatch.spark.spark_scaling",
+    "live_poll": "floodwatch.live.live_poll",
+    "observed_poll": "floodwatch.live.observed_poll",
+    "live_common": "floodwatch.experiments.live_common",
+    "live_calibration": "floodwatch.experiments.live_calibration",
+    "stage1b_gfs_calibration": "floodwatch.experiments.stage1b_gfs_calibration",
+    "gfs_input_preflight": "floodwatch.experiments.gfs_input_preflight",
+    "phase_b_probe": "floodwatch.experiments.phase_b_probe",
+    "test_tcwv_2024": "floodwatch.experiments.test_tcwv_2024",
+    "stage1_glofas_test": "floodwatch.experiments.stage1_glofas_test",
+    "stage3_diagnostics": "floodwatch.experiments.stage3_diagnostics",
+    "build_demo_pack": "floodwatch.tools.build_demo_pack"
+  },
+  "replacements": [
+    [
+      "from config import ",
+      "from floodwatch.core.config import "
+    ],
+    [
+      "import config as ",
+      "from floodwatch.core import config as "
+    ],
+    [
+      "from features import ",
+      "from floodwatch.core.features import "
+    ],
+    [
+      "import features as ",
+      "from floodwatch.core import features as "
+    ],
+    [
+      "from targets import ",
+      "from floodwatch.core.targets import "
+    ],
+    [
+      "import targets as ",
+      "from floodwatch.core import targets as "
+    ],
+    [
+      "from stage5_replay import ",
+      "from floodwatch.dashboard.stage5_replay import "
+    ],
+    [
+      "import stage5_replay as ",
+      "from floodwatch.dashboard import stage5_replay as "
+    ],
+    [
+      "from spark_dashboard import ",
+      "from floodwatch.dashboard.spark_dashboard import "
+    ],
+    [
+      "import spark_dashboard as ",
+      "from floodwatch.dashboard import spark_dashboard as "
+    ],
+    [
+      "from live_monitor import ",
+      "from floodwatch.dashboard.live_monitor import "
+    ],
+    [
+      "import live_monitor as ",
+      "from floodwatch.dashboard import live_monitor as "
+    ],
+    [
+      "from observed_monitor import ",
+      "from floodwatch.dashboard.observed_monitor import "
+    ],
+    [
+      "import observed_monitor as ",
+      "from floodwatch.dashboard import observed_monitor as "
+    ],
+    [
+      "from spark_dashboard_integrity import ",
+      "from floodwatch.dashboard.spark_dashboard_integrity import "
+    ],
+    [
+      "import spark_dashboard_integrity as ",
+      "from floodwatch.dashboard import spark_dashboard_integrity as "
+    ],
+    [
+      "from stage1_fetch import ",
+      "from floodwatch.pipeline.stage1_fetch import "
+    ],
+    [
+      "import stage1_fetch as ",
+      "from floodwatch.pipeline import stage1_fetch as "
+    ],
+    [
+      "from stage1b_fetch import ",
+      "from floodwatch.pipeline.stage1b_fetch import "
+    ],
+    [
+      "import stage1b_fetch as ",
+      "from floodwatch.pipeline import stage1b_fetch as "
+    ],
+    [
+      "from stage2_analysis import ",
+      "from floodwatch.pipeline.stage2_analysis import "
+    ],
+    [
+      "import stage2_analysis as ",
+      "from floodwatch.pipeline import stage2_analysis as "
+    ],
+    [
+      "from stage3_models import ",
+      "from floodwatch.pipeline.stage3_models import "
+    ],
+    [
+      "import stage3_models as ",
+      "from floodwatch.pipeline import stage3_models as "
+    ],
+    [
+      "from stage3_calendar_ablation import ",
+      "from floodwatch.pipeline.stage3_calendar_ablation import "
+    ],
+    [
+      "import stage3_calendar_ablation as ",
+      "from floodwatch.pipeline import stage3_calendar_ablation as "
+    ],
+    [
+      "from stage4_analogues import ",
+      "from floodwatch.pipeline.stage4_analogues import "
+    ],
+    [
+      "import stage4_analogues as ",
+      "from floodwatch.pipeline import stage4_analogues as "
+    ],
+    [
+      "from stage_sat_fetch import ",
+      "from floodwatch.pipeline.stage_sat_fetch import "
+    ],
+    [
+      "import stage_sat_fetch as ",
+      "from floodwatch.pipeline import stage_sat_fetch as "
+    ],
+    [
+      "from stage1b_check import ",
+      "from floodwatch.checks.stage1b_check import "
+    ],
+    [
+      "import stage1b_check as ",
+      "from floodwatch.checks import stage1b_check as "
+    ],
+    [
+      "from stage3_calendar_check import ",
+      "from floodwatch.checks.stage3_calendar_check import "
+    ],
+    [
+      "import stage3_calendar_check as ",
+      "from floodwatch.checks import stage3_calendar_check as "
+    ],
+    [
+      "from stage_live_check import ",
+      "from floodwatch.checks.stage_live_check import "
+    ],
+    [
+      "import stage_live_check as ",
+      "from floodwatch.checks import stage_live_check as "
+    ],
+    [
+      "from stage1_check import ",
+      "from floodwatch.checks.stage1_check import "
+    ],
+    [
+      "import stage1_check as ",
+      "from floodwatch.checks import stage1_check as "
+    ],
+    [
+      "from stage_sat_check import ",
+      "from floodwatch.checks.stage_sat_check import "
+    ],
+    [
+      "import stage_sat_check as ",
+      "from floodwatch.checks import stage_sat_check as "
+    ],
+    [
+      "from stage_spark_dashboard_check import ",
+      "from floodwatch.checks.stage_spark_dashboard_check import "
+    ],
+    [
+      "import stage_spark_dashboard_check as ",
+      "from floodwatch.checks import stage_spark_dashboard_check as "
+    ],
+    [
+      "from stage5_check import ",
+      "from floodwatch.checks.stage5_check import "
+    ],
+    [
+      "import stage5_check as ",
+      "from floodwatch.checks import stage5_check as "
+    ],
+    [
+      "from stage4_check import ",
+      "from floodwatch.checks.stage4_check import "
+    ],
+    [
+      "import stage4_check as ",
+      "from floodwatch.checks import stage4_check as "
+    ],
+    [
+      "from stage2_check import ",
+      "from floodwatch.checks.stage2_check import "
+    ],
+    [
+      "import stage2_check as ",
+      "from floodwatch.checks import stage2_check as "
+    ],
+    [
+      "from stage3_check import ",
+      "from floodwatch.checks.stage3_check import "
+    ],
+    [
+      "import stage3_check as ",
+      "from floodwatch.checks import stage3_check as "
+    ],
+    [
+      "from stage_spark_check import ",
+      "from floodwatch.checks.stage_spark_check import "
+    ],
+    [
+      "import stage_spark_check as ",
+      "from floodwatch.checks import stage_spark_check as "
+    ],
+    [
+      "from spark_runtime import ",
+      "from floodwatch.spark.spark_runtime import "
+    ],
+    [
+      "import spark_runtime as ",
+      "from floodwatch.spark import spark_runtime as "
+    ],
+    [
+      "from spark_pipeline import ",
+      "from floodwatch.spark.spark_pipeline import "
+    ],
+    [
+      "import spark_pipeline as ",
+      "from floodwatch.spark import spark_pipeline as "
+    ],
+    [
+      "from spark_fetch_hourly import ",
+      "from floodwatch.spark.spark_fetch_hourly import "
+    ],
+    [
+      "import spark_fetch_hourly as ",
+      "from floodwatch.spark import spark_fetch_hourly as "
+    ],
+    [
+      "from spark_rain_diagnosis import ",
+      "from floodwatch.spark.spark_rain_diagnosis import "
+    ],
+    [
+      "import spark_rain_diagnosis as ",
+      "from floodwatch.spark import spark_rain_diagnosis as "
+    ],
+    [
+      "from spark_scaling import ",
+      "from floodwatch.spark.spark_scaling import "
+    ],
+    [
+      "import spark_scaling as ",
+      "from floodwatch.spark import spark_scaling as "
+    ],
+    [
+      "from live_poll import ",
+      "from floodwatch.live.live_poll import "
+    ],
+    [
+      "import live_poll as ",
+      "from floodwatch.live import live_poll as "
+    ],
+    [
+      "from observed_poll import ",
+      "from floodwatch.live.observed_poll import "
+    ],
+    [
+      "import observed_poll as ",
+      "from floodwatch.live import observed_poll as "
+    ],
+    [
+      "from live_common import ",
+      "from floodwatch.experiments.live_common import "
+    ],
+    [
+      "import live_common as ",
+      "from floodwatch.experiments import live_common as "
+    ],
+    [
+      "from live_calibration import ",
+      "from floodwatch.experiments.live_calibration import "
+    ],
+    [
+      "import live_calibration as ",
+      "from floodwatch.experiments import live_calibration as "
+    ],
+    [
+      "from stage1b_gfs_calibration import ",
+      "from floodwatch.experiments.stage1b_gfs_calibration import "
+    ],
+    [
+      "import stage1b_gfs_calibration as ",
+      "from floodwatch.experiments import stage1b_gfs_calibration as "
+    ],
+    [
+      "from gfs_input_preflight import ",
+      "from floodwatch.experiments.gfs_input_preflight import "
+    ],
+    [
+      "import gfs_input_preflight as ",
+      "from floodwatch.experiments import gfs_input_preflight as "
+    ],
+    [
+      "from phase_b_probe import ",
+      "from floodwatch.experiments.phase_b_probe import "
+    ],
+    [
+      "import phase_b_probe as ",
+      "from floodwatch.experiments import phase_b_probe as "
+    ],
+    [
+      "from test_tcwv_2024 import ",
+      "from floodwatch.experiments.test_tcwv_2024 import "
+    ],
+    [
+      "import test_tcwv_2024 as ",
+      "from floodwatch.experiments import test_tcwv_2024 as "
+    ],
+    [
+      "from stage1_glofas_test import ",
+      "from floodwatch.experiments.stage1_glofas_test import "
+    ],
+    [
+      "import stage1_glofas_test as ",
+      "from floodwatch.experiments import stage1_glofas_test as "
+    ],
+    [
+      "from stage3_diagnostics import ",
+      "from floodwatch.experiments.stage3_diagnostics import "
+    ],
+    [
+      "import stage3_diagnostics as ",
+      "from floodwatch.experiments import stage3_diagnostics as "
+    ],
+    [
+      "from build_demo_pack import ",
+      "from floodwatch.tools.build_demo_pack import "
+    ],
+    [
+      "import build_demo_pack as ",
+      "from floodwatch.tools import build_demo_pack as "
+    ],
+    [
+      "ROOT = Path(__file__).resolve().parent",
+      "ROOT = Path(__file__).resolve().parents[2]"
+    ],
+    [
+      "REPORT = Path(__file__).resolve().parent/'outputs/spark'",
+      "REPORT = Path(__file__).resolve().parents[2]/'outputs/spark'"
+    ],
+    [
+      "c.ROOT/'spark_queries.sql'",
+      "c.ROOT/'floodwatch/spark/spark_queries.sql'"
+    ]
+  ],
+  "original_source_sha256": {
+    "gfs_input_preflight.py": "51b6795fe6d76d5dc79cc5925625b2baa582ee9c816c89ea78094f2ff1b9da48",
+    "stage1b_gfs_calibration.py": "8bb6f32491e9ee2cf92e6036cdb461b136d23813f62c1f9f6df2c0b16a5ca918",
+    "spark_dashboard.py": "ccda033e7918cd9298b56f6606f3c3e8e311fcbb90e0d24933f0375601878441",
+    "stage1b_check.py": "170a05cbd750545f7aac4f1cbc2dac34e85ac4c4c841fc03d65464aedc43a10b",
+    "stage3_calendar_ablation.py": "7dd92ba04424c2894a61e0c603da72c3a8babc5612834cd1b998006b289cd2c2",
+    "targets.py": "a72529f1585cf5f7af4a44cbf4396bfbdb090147dd7571ca501a986cfc73a672",
+    "config.py": "ab40ccf6751aee3d24ec20037b2210db69e050fbb7d898a27f56dc5b6634fd43",
+    "stage3_models.py": "ae914c223277afbed5dddb81ff0326cde67044c04ca43ebb634d82bab184977f",
+    "observed_poll.py": "25e3cff3923ecaf7147ac3fa49aae7b64b2f40afaf848394a52aa567b5384b7f",
+    "spark_runtime.py": "3ea9b8aff1e149af178e63af1d0b780f7afcc944afb1013fc82227a9c59d537c",
+    "stage1b_fetch.py": "cd0ce87f79b269efae17c3c43ef6bb88b471f850130a8f3817285a9a1c2100d2",
+    "spark_dashboard_integrity.py": "7d7ac148825c41c908bb4db210a3b58810537e432902493a6cf1549c9d634737",
+    "stage1_fetch.py": "73f959bddffab6a167137507b6216575a431857cd28bed504c1e510b1584b39a",
+    "observed_monitor.py": "a5a411f185c14565927aef87ec0fc1932627c9df89f25a73da26b3ea5c2b9ef4",
+    "spark_scaling.py": "d81ac4bc8e9e5c1ff1c2a09a28c08d860e3c537bedf90148a7486519f9e164b8",
+    "spark_fetch_hourly.py": "d5f49f42131152cc7c1508a7a00676741de202ab4a017027e766337c421df27d",
+    "live_calibration.py": "040c8e47d1a4e7d73c20d3275e9085f3668f619de4a565ed994a4d2827f76a10",
+    "stage4_analogues.py": "c7bd10a727bee7857890724ceb4b1f689f1014a2567bd33532add7542128e110",
+    "stage3_calendar_check.py": "49285eef5016b4b67797acf83ad045a364392156a24677af3230788ffe37a302",
+    "stage_sat_fetch.py": "0f387041278a55d124978057859e3ccf4885fc073fe1fcf0087bc209809c2dc9",
+    "stage_live_check.py": "2c28f5e0327e87103017d147bd9667c2a83cef3d0caa652e9c1a6a51176c018e",
+    "live_monitor.py": "383fa8dc69dcaf22f28e9ed34d02de6b0a7baf870ec924aa3a2a05f36c8a2527",
+    "live_poll.py": "d0c9131683e716756668afc196b8dd37113da83f9eb07dca90a330144165762f",
+    "stage2_analysis.py": "ce6dcd5df53135cf446f1bd30ed30181027975a2ae878c9c2a527a382dde5bdc",
+    "build_demo_pack.py": "56940476581e74911818b094c1b1cfd99da068104a770730a411dd8f6d7f9a97",
+    "features.py": "2b910baf52cec8fd33bde07d5e526f98a8e76c29061280ddc645737240a680d9",
+    "stage1_check.py": "7b1f06448a7c3e54111a128c4adfdcae63e869c61e284366212bc9d4f405766f",
+    "stage_sat_check.py": "003907927442c65a4d560c755da8703fe884debcb498e4dbb33d4b5a1c13d37a",
+    "stage1_glofas_test.py": "c60b9fa27b070604f2c063bdac71af2a0bfa0414cef28fd49d2b4ef58063b3b9",
+    "stage_spark_dashboard_check.py": "d1c951678e7235aadd64de6c605dab7b47c8304c3c2950e7f2c3c9e9f9d998e5",
+    "stage5_replay.py": "d962949a06eed30706698e3c22d74307edca359b95dccd3890f1c798d35ab1bd",
+    "spark_pipeline.py": "1284dd313e6658a19d4a7bc66f4478ca6d79436df9763dd4ed8ad35157b64477",
+    "spark_rain_diagnosis.py": "512bdd00f41b15d9230dd013d3b4680e30dafa20784c8214cd4aa8d0212d42ca",
+    "live_common.py": "04bf28885ef232da1275ec6dfb109e3a2b602e981746d336e6026d985ae6496e",
+    "app.py": "98a7db867ab3483082d5583ae0cf8eef8ca9103a93392c836f96805faff68bc1",
+    "stage5_check.py": "8b31b284b62769c862092ca8ac14d9811756cad6fefe9a71eae3b8d938b15a05",
+    "stage4_check.py": "2d166301a0866e729bdc8523ea01d28d995e7cf24a9724d359704694ed472d7b",
+    "stage3_diagnostics.py": "534d53401126908bb1b92c1ab91b2b0a4a0aa469afaefba1d901cee40c1bd521",
+    "test_tcwv_2024.py": "3620f13c75418153ff04198f32444eec8f8433e6281623538aaa782d22186e64",
+    "stage2_check.py": "00c45db05bf3bc6852de714d2ac241c46ccb07b9881fdb99b8c48eba0d4f4f62",
+    "stage3_check.py": "dcb052f94f4715c0a17fb3e67a12e1eb8acd3de9bb34ce2821c1fd514c12dfff",
+    "phase_b_probe.py": "e82f6e0307b78fa4d374d5bccd3d2bf45a03e3732107a65ab087278d19dde5ae",
+    "stage_spark_check.py": "8817759c328d53f2f19e460e4b80b9533396e2df58cb0aac5abd027498eb5927"
+  },
+  "source_edits": {
+    "stage_live_check.py": [
+      [
+        "import hashlib\n",
+        "import hashlib\nfrom floodwatch.layout import legacy_digest, original_source\n"
+      ],
+      [
+        "assert sha(file)==digest, name",
+        "assert legacy_digest(file)==digest, name"
+      ],
+      [
+        "assert sha(c.ROOT/'spark_dashboard.py')",
+        "assert legacy_digest(c.ROOT/'spark_dashboard.py')"
+      ],
+      [
+        "current=(c.ROOT/'app.py').read_text()",
+        "current=original_source((c.ROOT/'app.py').read_text(), 'app.py')"
+      ]
+    ],
+    "stage_spark_check.py": [
+      [
+        "import hashlib\n",
+        "import hashlib\nfrom floodwatch.layout import legacy_digest, original_source\n"
+      ],
+      [
+        "hashlib.sha256((c.ROOT/path).read_bytes()).hexdigest()",
+        "legacy_digest(c.ROOT/path)"
+      ]
+    ],
+    "stage_spark_dashboard_check.py": [
+      [
+        "import hashlib\n",
+        "import hashlib\nfrom floodwatch.layout import legacy_digest, original_source\n"
+      ],
+      [
+        "hashlib.sha256((ROOT/path).read_bytes()).hexdigest()",
+        "legacy_digest(ROOT/path)"
+      ],
+      [
+        "name in ('spark_runtime','spark_pipeline')",
+        "name in ('spark_runtime','spark_pipeline', 'floodwatch.spark.spark_runtime', 'floodwatch.spark.spark_pipeline')"
+      ]
+    ],
+    "stage_sat_fetch.py": [
+      [
+        "import hashlib\n",
+        "import hashlib\nfrom floodwatch.layout import legacy_digest, original_source\n"
+      ],
+      [
+        "if not (c.ROOT/name).is_file() or hashlib.sha256((c.ROOT/name).read_bytes()).hexdigest() != wanted",
+        "if legacy_digest(c.ROOT/'outputs/spark/dashboard_original_app.py' if name == 'app.py' else c.ROOT/name) != wanted"
+      ]
+    ],
+    "live_common.py": [
+      [
+        "import hashlib\n",
+        "import hashlib\nfrom floodwatch.layout import legacy_digest, original_source\n"
+      ],
+      [
+        "digest(c.ROOT/name) != sha",
+        "legacy_digest(c.ROOT/name) != sha"
+      ]
+    ],
+    "spark_dashboard_integrity.py": [
+      [
+        "import hashlib\n",
+        "import hashlib\nfrom floodwatch.layout import legacy_digest, original_source\n"
+      ],
+      [
+        "current = (ROOT/'app.py').read_text()",
+        "current = original_source((ROOT/'app.py').read_text(), 'app.py')"
+      ],
+      [
+        "from floodwatch.dashboard.live_monitor import ",
+        "from live_monitor import "
+      ],
+      [
+        "from floodwatch.dashboard.spark_dashboard import ",
+        "from spark_dashboard import "
+      ]
+    ]
+  }
+}

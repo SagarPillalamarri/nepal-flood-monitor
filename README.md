@@ -2,36 +2,77 @@
 
 Identifying Monsoon Flood Precursors in Nepal's Bagmati River Basin Using Satellite and Weather Data. Study area: upstream of DHM station 550.05, Bagmati at Khokana. Daily period 2001–2025, modelling June–October. Train 2001–2019, test 2020–2025. September 2024 is held out of training. No random splits, source substitutions, invented data or interpolation.
 
-## Run
+## Run the frozen demo
+
+From the repository root, using the existing virtual environment:
+
+```sh
+venv/bin/streamlit run app.py
+```
+
+This loads saved results; no training or calibration is required. The pipeline commands later in this document describe how the research was produced. Do not rerun training for the frozen demo.
+
+## Project layout
+
+```text
+app.py                  Streamlit entry point
+floodwatch/
+  core/                 Configuration, feature engineering and flood targets
+  pipeline/             Historical data fetching, analysis and model training
+  dashboard/            Replay, Spark and live-monitor presentation
+  live/                 Current forecast and observed-gauge pollers
+  spark/                Spark processing, scaling and SQL queries
+  checks/               Validation and regression checks
+  experiments/          Diagnostics, API probes and deferred calibration
+  tools/                Demo-pack generation
+  layout.py             Historical source-path and integrity compatibility
+  relocation.json       Original-to-current source paths and mechanical edits
+data/processed/        Accepted daily inputs and features
+outputs/               Saved models, results, plots and validation evidence
+```
+
+Run Python scripts as modules from the repository root, for example:
+
+```sh
+venv/bin/python -m floodwatch.checks.stage_live_check
+venv/bin/python -m floodwatch.checks.stage_spark_dashboard_check
+venv/bin/python -m floodwatch.checks.stage5_check
+venv/bin/python -m floodwatch.live.live_poll
+venv/bin/python -m floodwatch.live.observed_poll
+```
+
+The reorganization changes source paths and imports only, plus the adapters needed by historical integrity checks. Model files, thresholds, feature calculations and accepted data are unchanged. The original frozen hash manifests remain intact: source checks reverse the explicitly recorded import/path/adapter edits before comparing to the original hashes; data and model artifacts are checked directly byte-for-byte. Historical reports retain their original source filenames. The `experiments/` directory includes unfinished live calibration and is not required to run the dashboard.
+
+## Research pipeline commands
 
 Use the project's Python 3.10+ environment from the root. Quote paths containing spaces:
 
 ```sh
 cd '/Users/sagarp/Documents/BDA_SEM 7'
 python -m pip install -r 'requirements.txt'
-python 'stage1b_fetch.py'
-python 'stage1b_check.py'
-python 'stage2_analysis.py'
-python 'stage2_check.py'
+python -m floodwatch.pipeline.stage1b_fetch
+python -m floodwatch.checks.stage1b_check
+python -m floodwatch.pipeline.stage2_analysis
+python -m floodwatch.checks.stage2_check
 ```
 
-Stop after each stage for user verification. Stage 2 was explicitly authorized following a Stage 1b check with no FAILs; Stage 2 was approved, including the additions below; Stage 3 has now been built and checked. All settings, paths, dates and decision thresholds are in `config.py`.
+Stop after each stage for user verification. Stage 2 was explicitly authorized following a Stage 1b check with no FAILs; Stage 2 was approved, including the additions below; Stage 3 has now been built and checked. All settings, paths, dates and decision thresholds are in `floodwatch/core/config.py`.
 
 ## Stage 1
 
-Existing `stage1_fetch.py` downloads rainfall, soil moisture and GloFAS candidates. It has not been changed. Rainfall and soil moisture retain all nine points. `stage1_check.py` now reports the configured `GLOFAS_CHOSEN` (`q_north`) rather than choosing by percentile rank, retaining its low-mean-flow warning. Verified: 8 PASS, 0 WARN, 0 FAIL; September event peak 705.3 m³/s.
+Existing `floodwatch/pipeline/stage1_fetch.py` downloads rainfall, soil moisture and GloFAS candidates. It has not been changed. Rainfall and soil moisture retain all nine points. `floodwatch/checks/stage1_check.py` now reports the configured `GLOFAS_CHOSEN` (`q_north`) rather than choosing by percentile rank, retaining its low-mean-flow warning. Verified: 8 PASS, 0 WARN, 0 FAIL; September event peak 705.3 m³/s.
 
 ## Stage 1b: TCWV and ONI
 
-`stage1b_fetch.py` reuses existing caches and adds `tcwv_mm` and `oni` to the unchanged Stage 1 columns in `data/processed/stage1b_daily.csv` (9,131 rows). TCWV uses **all nine points throughout**; the former point exclusion has been removed. ERA5 is explicitly selected. Each point needs all 24 hourly values for a valid daily mean, and the basin mean needs all nine points. Any incomplete day stays NaN rather than averaging incomplete hours or fewer points. There are no repair requests for the confirmed gap. Missing 2025 data was fetched once; earlier years were reused.
+`floodwatch/pipeline/stage1b_fetch.py` reuses existing caches and adds `tcwv_mm` and `oni` to the unchanged Stage 1 columns in `data/processed/stage1b_daily.csv` (9,131 rows). TCWV uses **all nine points throughout**; the former point exclusion has been removed. ERA5 is explicitly selected. Each point needs all 24 hourly values for a valid daily mean, and the basin mean needs all nine points. Any incomplete day stays NaN rather than averaging incomplete hours or fewer points. There are no repair requests for the confirmed gap. Missing 2025 data was fetched once; earlier years were reused.
 
 New hourly responses are checked for expected point count, timestamps/row count, non-null values, units and physical sign before an atomic cache write. Only NaNs inside the explicitly approved ERA5 source gap are accepted; unexpected missing values, infinities and other source failures still stop processing.
 
 NOAA ONI is cached in `data/raw/stage1b/oni.ascii.txt`; `data/processed/oni_daily.csv` contains 9,131 validated daily assignments. The index uses the three-month season ending two months before the scoring month (September -> MJJ; January -> previous-year SON). NOAA labels seasons by their centre month's year. Historical values can be revised slightly; the lag rule does not reconstruct original publication vintages. Stage 3 must ablate optional ONI and drop it if test results do not improve.
 
-`features.py` provides the shared TCWV percentile definition, to be used for training and later scoring: 2001–2019 ERA5 monsoon reference, ±15-calendar-day seasonal window, midranks for ties and month/day alignment across leap years. Missing TCWV remains a missing percentile. No 2020–2025 ERA5 values enter this reference. Raw TCWV is stored for analysis, not a model feature.
+`floodwatch/core/features.py` provides the shared TCWV percentile definition, to be used for training and later scoring: 2001–2019 ERA5 monsoon reference, ±15-calendar-day seasonal window, midranks for ties and month/day alignment across leap years. Missing TCWV remains a missing percentile. No 2020–2025 ERA5 values enter this reference. Raw TCWV is stored for analysis, not a model feature.
 
-`stage1b_check.py` checks unchanged Stage 1 data, daily coverage, equality to the all-nine-point cached aggregation including missing values, ONI timing, training-only climatology, September elevated TCWV and prefix invariance. It reports GFS deferral and the approved source gap as WARN. Results are saved to `data/processed/stage1b_checks.csv`; any FAIL exits 1.
+`floodwatch/checks/stage1b_check.py` checks unchanged Stage 1 data, daily coverage, equality to the all-nine-point cached aggregation including missing values, ONI timing, training-only climatology, September elevated TCWV and prefix invariance. It reports GFS deferral and the approved source gap as WARN. Results are saved to `data/processed/stage1b_checks.csv`; any FAIL exits 1.
 
 Verified Stage 1b result: **9 PASS, 2 WARN, 0 FAIL**. September 26–28 TCWV is 44.60, 45.23 and 44.64 mm, with seasonal percentiles 98.30, 98.98 and 98.98.
 
@@ -44,11 +85,11 @@ Verified Stage 1b result: **9 PASS, 2 WARN, 0 FAIL**. September 26–28 TCWV is 
 
 ### Deferred or excluded sources
 
-`stage1b_gfs_calibration.py` is separate and **has not run**. It is deferred until after Monday. It downloads GFS TCWV from March 2021 onward, ranks it against its own climatology, and compares overlapping monsoon percentiles with ERA5 (WARN below correlation 0.7). This is a descriptive calibration, not an out-of-sample model metric; any historical operational replay must freeze reference data before scoring. Forecast archive: skipped. 850 hPa winds: excluded, future work only.
+`floodwatch/experiments/stage1b_gfs_calibration.py` is separate and **has not run**. It is deferred until after Monday. It downloads GFS TCWV from March 2021 onward, ranks it against its own climatology, and compares overlapping monsoon percentiles with ERA5 (WARN below correlation 0.7). This is a descriptive calibration, not an out-of-sample model metric; any historical operational replay must freeze reference data before scoring. Forecast archive: skipped. 850 hPa winds: excluded, future work only.
 
 ## Stage 2: labels and precursor analysis
 
-`stage2_analysis.py` writes daily **same-day** flood labels and descriptive event composites. It does not create future targets or predictive features; those belong to Stage 3's shared `features.py`.
+`floodwatch/pipeline/stage2_analysis.py` writes daily **same-day** flood labels and descriptive event composites. It does not create future targets or predictive features; those belong to Stage 3's shared `floodwatch/core/features.py`.
 
 If `data/raw/dhm_khokana.csv` exists, configured columns `date`, `water_level`, `danger_level` must have complete daily coverage. Flood is water level >= danger level. An existing but incomplete DHM file fails rather than silently switching sources. Otherwise flood is `q_north` strictly above its 99th-percentile **training-period monsoon** discharge. The threshold is deliberately frozen using 2001–2019 to comply with the no-test-leakage rule. Labels can exist outside monsoon, but those days/events are flagged and excluded from future monsoon modelling.
 
@@ -71,7 +112,7 @@ Outputs:
 - `outputs/stage2/composite_*.png` and `case_study_labels.png`: plots.
 - `outputs/stage2/checks.csv`: check results.
 
-`stage2_check.py` verifies source preservation, label rule/threshold, event count (WARN below 15), seven-day separation, membership and peaks, outside-season flags, annual counts, September 2024 detection peaking September 28 ±1 day, and its exclusion from training. It verifies that truncating input at 2019 leaves fitted labels/threshold/climatology unchanged, that window values match their source dates including NaNs, and that composite means exclude NaNs with correct counts. It also checks precursor crossings and plot files. It ends with a PASS/WARN/FAIL summary and exits 1 on any FAIL.
+`floodwatch/checks/stage2_check.py` verifies source preservation, label rule/threshold, event count (WARN below 15), seven-day separation, membership and peaks, outside-season flags, annual counts, September 2024 detection peaking September 28 ±1 day, and its exclusion from training. It verifies that truncating input at 2019 leaves fitted labels/threshold/climatology unchanged, that window values match their source dates including NaNs, and that composite means exclude NaNs with correct counts. It also checks precursor crossings and plot files. It ends with a PASS/WARN/FAIL summary and exits 1 on any FAIL.
 
 ## Remaining demo scope
 
@@ -94,22 +135,22 @@ In the descriptive all-event composite, TCWV first exceeds the same-calendar-day
 
 `outputs/stage2/conditional_probabilities.csv` contains empirical onset probabilities for each requested condition and horizons 1 and 3, using only training monsoon days and training-fitted percentile references. It includes `n_days`, positive day counts and probabilities. `all_monsoon_days` is the requested all-days population; `not_currently_flooding` supplies the analogous at-risk population with flood days excluded. Each population has five conditions (base rate; TCWV percentile >=90; >=95; >=95 and topsoil seasonal percentile >75; three-day rainfall percentile >=95). These are day-level conditional frequencies, not counts of independent events. They are training-period descriptions, not test performance estimates. Zero counts produce NaN, not an invented probability.
 
-`stage2_analysis.py` also prints all 26 event onset and peak dates. The enhanced Stage 2 checker verifies denominators and future onset counts directly against the event catalogue: **15 PASS, 0 WARN, 0 FAIL**. Stage 3 and Stage 4 results are documented below.
+`floodwatch/pipeline/stage2_analysis.py` also prints all 26 event onset and peak dates. The enhanced Stage 2 checker verifies denominators and future onset counts directly against the event catalogue: **15 PASS, 0 WARN, 0 FAIL**. Stage 3 and Stage 4 results are documented below.
 
 ## Stage 3: onset models
 
 ```sh
-python 'stage3_models.py' --horizon 1
-python 'stage3_check.py' --horizon 1
-python 'stage3_models.py' --horizon 3
-python 'stage3_check.py'
-python 'stage3_diagnostics.py'
-python 'stage3_calendar_ablation.py'
-python 'stage3_calendar_check.py'
-python 'stage4_analogues.py'
-python 'stage4_check.py'
-python 'stage5_replay.py'
-python 'stage5_check.py'
+python -m floodwatch.pipeline.stage3_models --horizon 1
+python -m floodwatch.checks.stage3_check --horizon 1
+python -m floodwatch.pipeline.stage3_models --horizon 3
+python -m floodwatch.checks.stage3_check
+python -m floodwatch.experiments.stage3_diagnostics
+python -m floodwatch.pipeline.stage3_calendar_ablation
+python -m floodwatch.checks.stage3_calendar_check
+python -m floodwatch.pipeline.stage4_analogues
+python -m floodwatch.checks.stage4_check
+python -m floodwatch.dashboard.stage5_replay
+python -m floodwatch.checks.stage5_check
 streamlit run 'app.py'
 ```
 
@@ -123,7 +164,7 @@ Training is 2001–2019. Main testing is 2020–2025 with **the whole September 
 
 ### Shared features and references
 
-`features.py` alone implements the predictive transformations: trailing 1/3/7/14-day rainfall percentiles, maximum-point rainfall percentile, raw soil moisture at the existing three depths and each 7-day change, topsoil percentile, discharge and 1/3-day rise rates (change divided by days), day of monsoon, TCWV percentile and optional lagged ONI. Features at t use data through the end of t only. The reference is passed explicitly to prevent implicit refitting during replay. References and model column lists are saved alongside the models.
+`floodwatch/core/features.py` alone implements the predictive transformations: trailing 1/3/7/14-day rainfall percentiles, maximum-point rainfall percentile, raw soil moisture at the existing three depths and each 7-day change, topsoil percentile, discharge and 1/3-day rise rates (change divided by days), day of monsoon, TCWV percentile and optional lagged ONI. Features at t use data through the end of t only. The reference is passed explicitly to prevent implicit refitting during replay. References and model column lists are saved alongside the models.
 
 Final seasonal percentiles use **only 2001–2019 monsoon observations**, with a ±15-calendar-day reference window. Inside each validation fold, the reference is refitted on that fold's earlier training prefix. Ranking rounds values to eight decimal places solely to identify ties consistently despite CSV floating-point round-trip noise; raw observations and missing values are unchanged. TCWV's 31 monsoon NaNs stay NaN through percentile conversion and XGBoost scoring; no imputer is used. The baseline depends only on available rainfall.
 
@@ -158,7 +199,7 @@ Separate September 2024: primary XGBoost misses the onset at both horizons. The 
 
 ### Calendar-prior ablation
 
-The September 2024 diagnosis prompted a comparison of the current primary feature set with the same set minus `monsoon_day`. For each horizon, both variants used the existing three chronological folds and pooled out-of-fold threshold tuning, using 2001–2019 only. The chosen feature set is the one with higher mean fold F1; an exact tie drops `monsoon_day`. September 2024 was not used for selection or threshold tuning. `stage3_calendar_check.py` verifies the split, selected variant, threshold, model outputs and metrics.
+The September 2024 diagnosis prompted a comparison of the current primary feature set with the same set minus `monsoon_day`. For each horizon, both variants used the existing three chronological folds and pooled out-of-fold threshold tuning, using 2001–2019 only. The chosen feature set is the one with higher mean fold F1; an exact tie drops `monsoon_day`. September 2024 was not used for selection or threshold tuning. `floodwatch/checks/stage3_calendar_check.py` verifies the split, selected variant, threshold, model outputs and metrics.
 
 The 1-day variant without `monsoon_day` was selected (mean validation F1 0.099 vs 0.095; threshold 0.70). The 3-day variant with `monsoon_day` was selected (0.119 vs 0.094; threshold 0.40). Test results for both variants are shown so the non-selected results remain visible:
 
@@ -173,38 +214,38 @@ On the separate September 2024 case, both 1-day variants miss. The selected 3-da
 
 ### Stage 3 diagnostics
 
-`stage3_diagnostics.py` reads the saved models, thresholds and predictions. It does not train or tune. It reports September 20–27 risk scores and score ranks among eligible 2020–2025 held-out dates, including the separately reported September case rows; display percentiles for all primary model inputs; XGBoost log-odds contributions for September 25–26; the September onset and label threshold; and detection of the six main-test events. `outputs/stage3/diagnostics/protected_hashes.json` records unchanged model and threshold hashes. September diagnostics are descriptive and must not be used to retune the models.
+`floodwatch/experiments/stage3_diagnostics.py` reads the saved models, thresholds and predictions. It does not train or tune. It reports September 20–27 risk scores and score ranks among eligible 2020–2025 held-out dates, including the separately reported September case rows; display percentiles for all primary model inputs; XGBoost log-odds contributions for September 25–26; the September onset and label threshold; and detection of the six main-test events. `outputs/stage3/diagnostics/protected_hashes.json` records unchanged model and threshold hashes. September diagnostics are descriptive and must not be used to retune the models.
 
 The subsequent `monsoon_day` ablation was prompted by the September diagnosis. Selection and threshold tuning used validation folds only; the case was not used. Its separate models, test/case comparison and 6-pass check are under `outputs/stage3/calendar_ablation/`.
 
 ### Stage 4: nearest historical precursor
 
-`stage4_analogues.py` compares only TCWV percentile, 1/3/7-day rainfall percentiles, topsoil moisture and 1-day discharge rise. It never uses `monsoon_day`. Leave-one-event-out validation on the 19 training events asks, at onset-1 and onset-2, whether the nearest template from another event ends within 1–3 days of that event's onset. Scalers are refitted with the held-out event's query and flood dates excluded. The 14-day window has the higher hit rate (12/38, 31.6%) than 7 days (9/38, 23.7%), so 14 days is selected. Daily candidates must precede the query; September 2024 uses event templates dated through 2023. Missing windows are left unmatched; there is no filling or DTW. Daily rows report closest event, onset, peak, matched lead, distance and candidate count. `stage4_check.py` verifies the LOEO selection, scaling, September restriction and representative distances.
+`floodwatch/pipeline/stage4_analogues.py` compares only TCWV percentile, 1/3/7-day rainfall percentiles, topsoil moisture and 1-day discharge rise. It never uses `monsoon_day`. Leave-one-event-out validation on the 19 training events asks, at onset-1 and onset-2, whether the nearest template from another event ends within 1–3 days of that event's onset. Scalers are refitted with the held-out event's query and flood dates excluded. The 14-day window has the higher hit rate (12/38, 31.6%) than 7 days (9/38, 23.7%), so 14 days is selected. Daily candidates must precede the query; September 2024 uses event templates dated through 2023. Missing windows are left unmatched; there is no filling or DTW. Daily rows report closest event, onset, peak, matched lead, distance and candidate count. `floodwatch/checks/stage4_check.py` verifies the LOEO selection, scaling, September restriction and representative distances.
 
 Verified Stage 4: **6 PASS, 0 WARN, 0 FAIL**. There are 360 usable templates and 3,825 daily monsoon rows; 3,398 rows have a nearest-event match. With physical features, September 20–25 maps to the July 1, 2011 event at leads 6, 5, 4, 4, 3 and 2 days; September 26–27 maps to September 23, 2020 at leads 9 and 8 days; September 28 maps to July 10, 2020 at lead 1 day. See `outputs/stage4/daily_analogues.csv`, `loo_evaluation.csv` and `checks.csv`.
 
 ### Stage 5: September replay dashboard
 
-Run `python 'stage5_replay.py'`, `python 'stage5_check.py'`, then `streamlit run 'app.py'`. The slider steps through September 1–30 and shows rainfall, TCWV percentile, soil moisture, discharge, the selected 1-day and 3-day model scores and thresholds, and the closest past analogue. Scores remain blank on days excluded from case evaluation under the ongoing-flood and target-window rules. The app reads saved predictions and does not retrain models. `outputs/stage5/september_2024_replay.csv` is the dashboard data; `september_20_28_diagnostics.csv` contains the requested comparison table; `outputs/stage5/checks.csv` records validation. Streamlit is listed in `requirements.txt`. Stage 5 check: **3 PASS, 0 WARN, 0 FAIL**. Streamlit AppTest rendered the date slider and six metric widgets with no app exceptions.
+Run `python -m floodwatch.dashboard.stage5_replay`, `python -m floodwatch.checks.stage5_check`, then `streamlit run 'app.py'`. The slider steps through September 1–30 and shows rainfall, TCWV percentile, soil moisture, discharge, the selected 1-day and 3-day model scores and thresholds, and the closest past analogue. Scores remain blank on days excluded from case evaluation under the ongoing-flood and target-window rules. The app reads saved predictions and does not retrain models. `outputs/stage5/september_2024_replay.csv` is the dashboard data; `september_20_28_diagnostics.csv` contains the requested comparison table; `outputs/stage5/checks.csv` records validation. Streamlit is listed in `requirements.txt`. Stage 5 check: **3 PASS, 0 WARN, 0 FAIL**. Streamlit AppTest rendered the date slider and six metric widgets with no app exceptions.
 
 All five stages are now complete within the approved demo scope. The calendar-feature and analogue-window choices use training-period validation only; September 2024 remains a separate diagnostic replay.
 
 ## Frozen-model satellite rainfall validation and demo pack
 
-The models, thresholds, selected variants, predictive features and dashboard scoring are frozen. `stage_sat_fetch.py` accesses only `NASA/GPM_L3/IMERG_V07`, band `precipitation` (mm/hour), through read-only Earth Engine project `bdasem-7`. This is a validation dataset, never a model input. The optional client dependency is listed in `requirements_satellite.txt`; the dashboard does not require Earth Engine.
+The models, thresholds, selected variants, predictive features and dashboard scoring are frozen. `floodwatch/pipeline/stage_sat_fetch.py` accesses only `NASA/GPM_L3/IMERG_V07`, band `precipitation` (mm/hour), through read-only Earth Engine project `bdasem-7`. This is a validation dataset, never a model input. The optional client dependency is listed in `requirements_satellite.txt`; the dashboard does not require Earth Engine.
 
 The spatial mean is pixel-area-weighted over the nine-point bounding rectangle [85.28, 27.62, 85.44, 27.78] at the native 0.1-degree grid. This is a study-area box, not a delineated catchment. Each Asia/Kathmandu day spans 49 overlapping half-hour intervals: the first and last contribute 0.25 hours and the middle 47 contribute 0.5 hours each, totaling 24 hours. Every month is checked for its exact half-hour timestamp sequence and complete pixel coverage before atomic caching. Missing intervals are not filled. Source provisional/permanent status is retained. The official catalogue notes that V07 has no permanent products beyond September 2025: [IMERG V07 documentation](https://developers.google.com/earth-engine/datasets/catalog/NASA_GPM_L3_IMERG_V07).
 
-`stage_sat_check.py` reports the September 20–30 daily comparison, monsoon means, raw and source-specific seasonal-percentile correlations, and three-day rainfall strictly before all 26 event onsets. Diagnostic percentiles use each source's own 2001–2019 monsoon reference and the existing ±15-calendar-day ranking convention. Complete three-day reference windows are matched between sources; the first two June days are omitted from both reference pools because the satellite download covers monsoon months only. No test year enters these references. Satellite checks and plots are under `outputs/satellite/`; monthly caches are under `data/raw/satellite/`; the final series is `data/processed/imerg_daily.csv`.
+`floodwatch/checks/stage_sat_check.py` reports the September 20–30 daily comparison, monsoon means, raw and source-specific seasonal-percentile correlations, and three-day rainfall strictly before all 26 event onsets. Diagnostic percentiles use each source's own 2001–2019 monsoon reference and the existing ±15-calendar-day ranking convention. Complete three-day reference windows are matched between sources; the first two June days are omitted from both reference pools because the satellite download covers monsoon months only. No test year enters these references. Satellite checks and plots are under `outputs/satellite/`; monthly caches are under `data/raw/satellite/`; the final series is `data/processed/imerg_daily.csv`.
 
-`build_demo_pack.py` reads the frozen artifacts and creates `outputs/demo/results_summary.md`, selected-model plots and launch commands. It only reloads saved models for feature importance; it never fits them. `outputs/satellite/frozen_artifact_hashes.json` verifies that the 80 recorded model/scoring artifacts remain unchanged. GloFAS labels share ERA5 forcing with the meteorological inputs, the main test contains only six events, and the approximate 1.5-day basin response is a working estimate rather than a calibrated result. The pack records these limitations alongside the known TCWV gap, wet rainfall bias and other caveats.
+`floodwatch/tools/build_demo_pack.py` reads the frozen artifacts and creates `outputs/demo/results_summary.md`, selected-model plots and launch commands. It only reloads saved models for feature importance; it never fits them. `outputs/satellite/frozen_artifact_hashes.json` verifies that the 80 recorded model/scoring artifacts remain unchanged. GloFAS labels share ERA5 forcing with the meteorological inputs, the main test contains only six events, and the approximate 1.5-day basin response is a working estimate rather than a calibrated result. The pack records these limitations alongside the known TCWV gap, wet rainfall bias and other caveats.
 
 Satellite result: **5 PASS, 2 WARN, 0 FAIL** across all 3,825 monsoon dates. Mean IMERG rainfall is 11.520 mm/day versus ERA5 14.643 mm/day. Daily Pearson correlation is 0.4941 for raw rainfall and 0.4422 for source-specific seasonal percentiles. Both sources rank the three-day rainfall before the September 28, 2024 onset at the 100th percentile. Warnings flag 31 days with non-permanent source intervals and the different spatial supports of IMERG and ERA5. These are validation findings only; the frozen models and dashboard scoring are unchanged.
 
 ```sh
-venv/bin/python stage_sat_fetch.py
-venv/bin/python stage_sat_check.py
-venv/bin/python build_demo_pack.py
+venv/bin/python -m floodwatch.pipeline.stage_sat_fetch
+venv/bin/python -m floodwatch.checks.stage_sat_check
+venv/bin/python -m floodwatch.tools.build_demo_pack
 # Demo only (no network fetch or model fitting required):
 venv/bin/streamlit run app.py
 ```
@@ -213,15 +254,15 @@ venv/bin/streamlit run app.py
 
 The earlier live scoring work was paused while Spark processing took priority. Phase A live input monitoring has now been delivered; the earlier scoring/calibration prototype remains deferred. No model, threshold, selected variant, feature definition or dashboard scoring was changed. The ECMWF probe returned all five required variables (24/24 valid hours each) for 27 September 2024 in Historical Weather (`ecmwf_ifs`) and for the current Forecast API (`ecmwf_ifs025`, also `ecmwf_ifs`). The advertised archive begins in 2017; the first local day has only 19 valid rainfall/soil hours. The attempted 2017 May–October calibration download failed validation because a requested variable had no complete daily values; it was not cached. ERA5 scale mappings and model risk scores have not been produced. Earlier probe results are preliminary and do not establish full archive coverage.
 
-Work in progress is saved in `live_common.py`, `live_calibration.py` and the updated `stage1b_gfs_calibration.py` entry point. These are unfinished and must not be used for operational scores. The follow-up historical coverage probe was read-only. At that earlier pause, no Today tab or SQLite store had been built; the new Phase A Live monitor and input-summary SQLite store described below supersede that status. Resume by resolving archive coverage, then fit input mappings and implement snapshot/offline checks; do not refit models or modify `features.py`.
+Work in progress is saved in `floodwatch/experiments/live_common.py`, `floodwatch/experiments/live_calibration.py` and the updated `floodwatch/experiments/stage1b_gfs_calibration.py` entry point. These are unfinished and must not be used for operational scores. The follow-up historical coverage probe was read-only. At that earlier pause, no Today tab or SQLite store had been built; the new Phase A Live monitor and input-summary SQLite store described below supersede that status. Resume by resolving archive coverage, then fit input mappings and implement snapshot/offline checks; do not refit models or modify `floodwatch/core/features.py`.
 
 ## Apache Spark processing layer
 
-`spark_pipeline.py` uses Apache Spark 4.0.1 DataFrames in `local[*]` mode with Homebrew Java 17, selected by `spark_runtime.py` without changing the system Java installation. The Spark UI is printed on startup, normally http://localhost:4040, and is available while the process runs. Install the optional dependency with `venv/bin/python -m pip install -r requirements_spark.txt`. The existing models, features, thresholds, selected variants, September replay and dashboard remain frozen; Spark builds parallel, checked data products rather than training anything.
+`floodwatch/spark/spark_pipeline.py` uses Apache Spark 4.0.1 DataFrames in `local[*]` mode with Homebrew Java 17, selected by `floodwatch/spark/spark_runtime.py` without changing the system Java installation. The Spark UI is printed on startup, normally http://localhost:4040, and is available while the process runs. Install the optional dependency with `venv/bin/python -m pip install -r requirements_spark.txt`. The existing models, features, thresholds, selected variants, September replay and dashboard remain frozen; Spark builds parallel, checked data products rather than training anything.
 
 The raw lake `data/lake/raw/` is Snappy Parquet partitioned by `variable` and `year`. Each row retains timestamp, requested latitude/longitude, variable and nullable value, plus source, original file and snapped grid coordinates. The session timezone is Asia/Kathmandu. Requested points remain distinct even when several snap to the same ERA5 grid cell. Source distinguishes the nine-point ERA5 TCWV archive, Stage 1 weather, and the two one-point GFS availability probes; GFS probes are retained in the lake but cannot contribute to the historical basin means. Every cached hourly value, including nulls, is retained. Daily satellite summaries and ONI files have no hourly records and are not relabelled as hourly data.
 
-Stage 1 had saved daily rainfall/soil data but no hourly API responses. `spark_fetch_hourly.py` recovered hourly precipitation and all three original soil depths at all nine requested points for 2001–2010. Open-Meteo returned HTTP 429 for 2011, so downloading stopped without retrying or requesting later years. All 25 years of existing hourly TCWV caches were reused. No data are invented, filled or interpolated. `outputs/spark/hourly_inventory.json` lists every included source file and `download_status.json` records the download limit.
+Stage 1 had saved daily rainfall/soil data but no hourly API responses. `floodwatch/spark/spark_fetch_hourly.py` recovered hourly precipitation and all three original soil depths at all nine requested points for 2001–2010. Open-Meteo returned HTTP 429 for 2011, so downloading stopped without retrying or requesting later years. All 25 years of existing hourly TCWV caches were reused. No data are invented, filled or interpolated. `outputs/spark/hourly_inventory.json` lists every included source file and `download_status.json` records the download limit.
 
 The lake contains 5,128,008 rows in 80 variable/year partitions and 80 Parquet data files: 14,543,819 bytes of Parquet versus 87,244,506 bytes of original hourly JSON, excluding small filesystem metadata files. `lake_stats.json` gives row/non-null counts per source and variable. This is a local multi-million-row processing demonstration, not a distributed cluster deployment.
 
@@ -229,65 +270,65 @@ Daily aggregation requires 24 distinct hourly timestamps and 24 non-null values 
 
 Rainfall interval diagnosis: [Open-Meteo documents hourly precipitation as the accumulation over the preceding hour](https://open-meteo.com/en/docs/historical-weather-api). Spark now assigns hours ending 01:00 through the following 00:00 (24:00) to that Kathmandu day by subtracting one hour from precipitation timestamps for grouping only. Other variables retain their original grouping clock. The previous 00:00–23:00 sum differed on 1,874 of 3,652 days: signed median 0 mm, signed 95th percentile 1 mm, maximum absolute difference 15.311111 mm, and 365 days with absolute difference >1 mm after rounding numerical noise to eight decimals (366 with an unrounded floating-point comparison). With the corrected interval, zero mismatches remain on 3,651 complete days (tolerance 1e-6 mm; largest numerical residual 2.84e-14 mm). The last cached day, 2010-12-31, lacks the following midnight and remains null; no extra download or filling was performed. Year boundaries use the next cached year’s midnight where present. Accepted Stage 1 daily totals are unchanged. Full diagnostics are in `outputs/spark/rainfall_diagnosis.json` and the two `rain_differences_shift_*.csv` files. `data/lake/features_daily/` contains both `hourly_precip_mm` and accepted `precip_mm`, with separate Spark Window 1/3/7/14-day sums (`hourly_rain_*` and `rain_*`). Hourly-derived values remain null beyond recovered coverage. The accepted cached daily rainfall drives the historical feature-percentile and Stage 2 SQL reproduction, with explicit provenance columns. Soil and TCWV use complete hourly aggregates where available and identify daily-only cached Stage 1 coverage elsewhere. Missing hourly coverage is never manufactured from daily inputs. All of these outputs are separate from the frozen predictive artifacts.
 
-Seasonal ranks use exact midranks, eight-decimal tie rounding and ±15 calendar days on a leap-year calendar, matching the unchanged `features.py`. Only June–October 2001–2019 observations enter `data/lake/seasonal_reference/`; no 2020–2025 observation can enter that reference. Spark SQL runs from `spark_queries.sql` and saves onset event counts by year, TCWV percentiles in the three days strictly before onset versus all monsoon days, and all 20 original Stage 2 conditional-probability rows. Both all-day and not-currently-flooding populations are reported explicitly.
+Seasonal ranks use exact midranks, eight-decimal tie rounding and ±15 calendar days on a leap-year calendar, matching the unchanged `floodwatch/core/features.py`. Only June–October 2001–2019 observations enter `data/lake/seasonal_reference/`; no 2020–2025 observation can enter that reference. Spark SQL runs from `floodwatch/spark/spark_queries.sql` and saves onset event counts by year, TCWV percentiles in the three days strictly before onset versus all monsoon days, and all 20 original Stage 2 conditional-probability rows. Both all-day and not-currently-flooding populations are reported explicitly.
 
-`stage_spark_check.py` is offline. It checks raw row retention and unique keys, every historical hourly-derived variable-day against independent pandas resampling, complete-day null masks, all rainfall windows, all seven seasonal percentile definitions, reference-year restrictions, exact SQL agreement, the source TCWV gap and all 80 original frozen artifact hashes. Rate-limited recovery is reported as a warning. The shifted-rainfall parity check verifies both basin means and max-point daily totals against the accepted totals. The user's check-script request ended at “Spark daily”; the remaining checks were implemented as integrity safeguards without altering the scientific rules.
+`floodwatch/checks/stage_spark_check.py` is offline. It checks raw row retention and unique keys, every historical hourly-derived variable-day against independent pandas resampling, complete-day null masks, all rainfall windows, all seven seasonal percentile definitions, reference-year restrictions, exact SQL agreement, the source TCWV gap and all 80 original frozen artifact hashes. Rate-limited recovery is reported as a warning. The shifted-rainfall parity check verifies both basin means and max-point daily totals against the accepted totals. The user's check-script request ended at “Spark daily”; the remaining checks were implemented as integrity safeguards without altering the scientific rules.
 
 Verified Spark result after rainfall correction: **8 PASS, 1 WARN, 0 FAIL**, with complete output in `outputs/spark/check_output.txt`. The former rainfall discrepancy is resolved by the preceding-hour interval correction. Across all 26 events, mean TCWV percentile in the 78 strictly pre-onset days is 74.296, versus 52.449 over valid monsoon days; the event-specific table is `tcwv_by_event.csv`. The training-period three-day onset probability given TCWV percentile ≥95 is 8/81 (9.88%), versus the all-day base rate 57/2,907 (1.96%). These are reproduced descriptive Stage 2 results, not new model selection. The original 183-day TCWV gap and September 26–28 percentiles are unchanged.
 
 ```sh
 # Optional recovery; already stopped at HTTP 429 for 2011 in this run:
-venv/bin/python spark_fetch_hourly.py
+venv/bin/python -m floodwatch.spark.spark_fetch_hourly
 # Local processing, no model fitting:
-venv/bin/python spark_pipeline.py
+venv/bin/python -m floodwatch.spark.spark_pipeline
 # Reuse the already built raw lake:
-venv/bin/python spark_pipeline.py --reuse-raw
-venv/bin/python stage_spark_check.py
+venv/bin/python -m floodwatch.spark.spark_pipeline --reuse-raw
+venv/bin/python -m floodwatch.checks.stage_spark_check
 # Historical dashboard remains unchanged:
 venv/bin/streamlit run app.py
 ```
 
 ### Spark scaling benchmark
 
-`venv/bin/python spark_scaling.py` uses 100 shuffle partitions at all scales and measures the shifted hourly-to-daily aggregation at 1x, 10x and 50x input rows using `local[*]`. It performs one untimed warm-up and three measured trials at each scale, reporting median wall-clock time in `outputs/spark/scaling.md` and raw timings in `scaling_trials.json`. Replicas carry independent source grouping keys, and counts/checksums must scale accordingly. Replication occurs inside Spark; no enlarged raw files or new scientific observations are created. This benchmark includes the Parquet scan, synthetic replication, shuffles and forced aggregation; it excludes startup, ingestion, feature percentiles, model scoring and output writes. It is an aggregation benchmark on one machine, not an end-to-end or cluster benchmark.
+`venv/bin/python -m floodwatch.spark.spark_scaling` uses 100 shuffle partitions at all scales and measures the shifted hourly-to-daily aggregation at 1x, 10x and 50x input rows using `local[*]`. It performs one untimed warm-up and three measured trials at each scale, reporting median wall-clock time in `outputs/spark/scaling.md` and raw timings in `scaling_trials.json`. Replicas carry independent source grouping keys, and counts/checksums must scale accordingly. Replication occurs inside Spark; no enlarged raw files or new scientific observations are created. This benchmark includes the Parquet scan, synthetic replication, shuffles and forced aggregation; it excludes startup, ingestion, feature percentiles, model scoring and output writes. It is an aggregation benchmark on one machine, not an end-to-end or cluster benchmark.
 
 The first 50x benchmark attempt exhausted the 3 GB Java heap with the default 10 shuffle partitions. Its logs and completed smaller-scale trials are preserved in `outputs/spark/scaling_initial_10_partitions*`. The reported comparison reruns all scales with 100 shuffle partitions and adaptive coalescing disabled, keeping the same heap and all CPU cores. This memory limit is part of the result and is not hidden.
 
 ### Big data pipeline dashboard tab
 
-`app.py` now has a **Big data pipeline** tab alongside the unchanged September replay. `spark_dashboard.py` reads only saved JSON/CSV/text reports under `outputs/spark/`; Streamlit never imports or starts Spark. The tab shows the pipeline diagram, lake statistics and variable coverage, measured per-column Spark/pandas differences, rainfall interval correction, SQL charts/tables, scaling medians and chart, and the physical plan with yellow markers on Exchange/hash-partitioning lines. The Nepal-wide comparison is an illustrative scale analogy dependent on archive duration and resolution; the actual benchmark is synthetic basin-data replication.
+`app.py` now has a **Big data pipeline** tab alongside the unchanged September replay. `floodwatch/dashboard/spark_dashboard.py` reads only saved JSON/CSV/text reports under `outputs/spark/`; Streamlit never imports or starts Spark. The tab shows the pipeline diagram, lake statistics and variable coverage, measured per-column Spark/pandas differences, rainfall interval correction, SQL charts/tables, scaling medians and chart, and the physical plan with yellow markers on Exchange/hash-partitioning lines. The Nepal-wide comparison is an illustrative scale analogy dependent on archive duration and resolution; the actual benchmark is synthetic basin-data replication.
 
-`stage_spark_check.py` exports `column_parity.csv` and `variable_coverage.csv` during offline processing. `stage_spark_dashboard_check.py` blocks Spark imports, renders both tabs, exercises the original replay slider and checks immutable model/scoring files and paused live-work hashes. Dashboard result: **4 PASS, 0 WARN, 0 FAIL**; see `outputs/spark/dashboard_check_output.txt`. Starting the local HTTP server was not approved in this session; rendering was verified with Streamlit AppTest.
+`floodwatch/checks/stage_spark_check.py` exports `column_parity.csv` and `variable_coverage.csv` during offline processing. `floodwatch/checks/stage_spark_dashboard_check.py` blocks Spark imports, renders both tabs, exercises the original replay slider and checks immutable model/scoring files and paused live-work hashes. Dashboard result: **4 PASS, 0 WARN, 0 FAIL**; see `outputs/spark/dashboard_check_output.txt`. Starting the local HTTP server was not approved in this session; rendering was verified with Streamlit AppTest.
 
-The authorized app change adds only the two-tab wrapper and pipeline-render call. The complete original app is preserved in `outputs/spark/dashboard_original_app.py` and still matches its original frozen hash. `spark_dashboard_integrity.py` verifies that the original imports, page configuration and entire replay body remain verbatim. The original satellite-era 80-file manifest remains intact as a historical baseline; the current Spark check verifies its 79 non-app files plus this explicit replay-integrity check, rather than claiming the app wrapper hash is unchanged. Models, features, thresholds and selected variants are unchanged, and live mode remains paused.
+The authorized app change adds only the two-tab wrapper and pipeline-render call. The complete original app is preserved in `outputs/spark/dashboard_original_app.py` and still matches its original frozen hash. `floodwatch/dashboard/spark_dashboard_integrity.py` verifies that the original imports, page configuration and entire replay body remain verbatim. The original satellite-era 80-file manifest remains intact as a historical baseline; the current Spark check verifies its 79 non-app files plus this explicit replay-integrity check, rather than claiming the app wrapper hash is unchanged. Models, features, thresholds and selected variants are unchanged, and live mode remains paused.
 
 ```sh
-venv/bin/python stage_spark_dashboard_check.py
+venv/bin/python -m floodwatch.checks.stage_spark_dashboard_check
 venv/bin/streamlit run app.py
 ```
 
 ## Live monitor — Phase A complete, model scoring deferred
 
-`live_poll.py` fetches `gfs_seamless` precipitation and total column integrated water vapour at all nine `BASIN_POINTS`, plus `seamless_v4` GloFAS discharge at `GLOFAS_CHOSEN` (`q_north`). Each successful run saves exact raw HTTP response bytes, request parameters, UTC fetch time, SHA256 response hashes, daily inputs and a summary under `data/live/snapshots/<timestamp>/`. It appends the summary to the `runs` table in `data/live/live_scores.sqlite`. Failed requests retain their raw/error evidence but do not replace the last successful displayed snapshot. No Kafka, background poller, model training or automatic fetching is used.
+`floodwatch/live/live_poll.py` fetches `gfs_seamless` precipitation and total column integrated water vapour at all nine `BASIN_POINTS`, plus `seamless_v4` GloFAS discharge at `GLOFAS_CHOSEN` (`q_north`). Each successful run saves exact raw HTTP response bytes, request parameters, UTC fetch time, SHA256 response hashes, daily inputs and a summary under `data/live/snapshots/<timestamp>/`. It appends the summary to the `runs` table in `data/live/live_scores.sqlite`. Failed requests retain their raw/error evidence but do not replace the last successful displayed snapshot. No Kafka, background poller, model training or automatic fetching is used.
 
 The window is the previous 14 days, today, and the next seven days (tomorrow through today+7). One extra weather day is requested to supply the following-midnight accumulation hour for the last displayed rainfall day. Rainfall uses hours ending 01:00–24:00; TCWV uses 00:00–23:00 means. Every point-day requires 24 values, and every basin mean requires all nine points. Nulls are preserved. Weather days are Asia/Kathmandu; GloFAS daily dates remain UTC, consistent with training inputs. GFS past-period values are modelled/archived forecasts, not rainfall observations.
 
 The **Live monitor** tab has a manual **Fetch now** button, fetch timestamp, seven-day discharge/threshold chart and table, raw GFS rainfall and TCWV charts with separate past/today and forecast series, a 22-day input table, and snapshot provenance. It shows exactly: “Live inputs only. Model risk scores need inputs on the ERA5 scale; see README.” This is necessary because GFS and ERA5 input distributions differ. Phase A performs no quantile mapping and no model scoring; `risk_1d` and `risk_3d` remain null. GloFAS exceedance is calculated directly against 445.191 m³/s and is not an XGBoost alert. The first snapshot fetched at 2026-10-18T14:00:11.849662+00:00 has no forecast exceedance for October 19–25; its maximum forecast flow is 2.08 m³/s.
 
-`stage_live_check.py` runs with network requests forbidden. It independently recomputes nine-point/24-hour weather values from raw responses, checks response hashes, CSV/SQLite reproduction, all seven GloFAS forecasts and the threshold statement, rendered table equality, and the Fetch now button with a mocked poller. Result: **5 PASS, 0 WARN, 0 FAIL** (`outputs/live/phase_a_check_output.txt`). The original 80-entry freeze manifest is not overwritten: 79 current protected files retain their hashes; its original app hash is verified against the preserved original app snapshot. The authorized three-tab wrapper is checked separately against `outputs/live/phase_a_prior_app.py`. The entire September replay body and Big data tab body/helper are unchanged. A screenshot is saved as `outputs/live/phase_a_monitor.png`.
+`floodwatch/checks/stage_live_check.py` runs with network requests forbidden. It independently recomputes nine-point/24-hour weather values from raw responses, checks response hashes, CSV/SQLite reproduction, all seven GloFAS forecasts and the threshold statement, rendered table equality, and the Fetch now button with a mocked poller. Result: **5 PASS, 0 WARN, 0 FAIL** (`outputs/live/phase_a_check_output.txt`). The original 80-entry freeze manifest is not overwritten: 79 current protected files retain their hashes; its original app hash is verified against the preserved original app snapshot. The authorized three-tab wrapper is checked separately against `outputs/live/phase_a_prior_app.py`. The entire September replay body and Big data tab body/helper are unchanged. A screenshot is saved as `outputs/live/phase_a_monitor.png`.
 
 ### Phase B next steps
 
 Phase B resumed only after Phase A passed. The new nine-point ECMWF IFS archive probe is saved under `outputs/live/phase_b_probe/`. On September 27 in 2017, 2021 and 2023, rainfall and all three soil layers each have 216/216 valid point-hours, but TCWV has 0/216. The September 27, 2025 sample has 216/216 for all five variables. Therefore the advertised 2017 archive start cannot be assumed to provide a complete TCWV climatology. The earlier calibration's all-null-variable rejection was valid; these missing source values must not be filled or silently replaced.
 
-Phase A remains the final usable state. Before enabling frozen-model scores, audit full temporal availability for ECMWF TCWV, establish a defensible paired calibration window for each variable, and verify Historical Weather IFS versus Forecast IFS product/resolution compatibility. If the earlier approved GFS fallback is selected, first validate its historical precipitation, TCWV and native soil layers and explicitly label the depth approximations. Then fit and save source-to-ERA5 quantile mappings, report overlap dates/counts and mapped-value correlations, fetch sufficient rolling-window warm-up, and use the unchanged `features.py`, model weights, thresholds, selected variants and analogue templates. Add offline mapping/feature/rescore checks before enabling any scores. Phase A continues to use raw GFS inputs until those checks pass.
+Phase A remains the final usable state. Before enabling frozen-model scores, audit full temporal availability for ECMWF TCWV, establish a defensible paired calibration window for each variable, and verify Historical Weather IFS versus Forecast IFS product/resolution compatibility. If the earlier approved GFS fallback is selected, first validate its historical precipitation, TCWV and native soil layers and explicitly label the depth approximations. Then fit and save source-to-ERA5 quantile mappings, report overlap dates/counts and mapped-value correlations, fetch sufficient rolling-window warm-up, and use the unchanged `floodwatch/core/features.py`, model weights, thresholds, selected variants and analogue templates. Add offline mapping/feature/rescore checks before enabling any scores. Phase A continues to use raw GFS inputs until those checks pass.
 
 ```sh
-venv/bin/python live_poll.py
-venv/bin/python stage_live_check.py
+venv/bin/python -m floodwatch.live.live_poll
+venv/bin/python -m floodwatch.checks.stage_live_check
 venv/bin/streamlit run app.py
 # Optional read-only archive coverage gate (not needed by the dashboard):
-venv/bin/python phase_b_probe.py
+venv/bin/python -m floodwatch.experiments.phase_b_probe
 ```
 
 ## Public observed live data
@@ -296,7 +337,7 @@ The Live monitor now starts with **Observed river level — DHM Khokana gauge**,
 
 ### DHM investigation and access
 
-The public page https://dhm.gov.np/hydrology/hms-Single/50 identifies Bagmati at Khokana, station 550.05, series ID 927. Its normal anonymous VIEW form posts to https://dhm.gov.np/site/getRiverWatchBySeriesId_Single with date, period=4 (7 Days Point), seriesid=927 and the public page's anonymous CSRF form token. The HTTP 200 response is JSON containing chart/table HTML. The chart embeds hex-escaped JSON with explicit UTC timestamps and ten-minute observed water-level values. `observed_poll.py` decodes this JSON without executing JavaScript. The HTML table's ambiguous clock labels are not used for timestamps. The page/plot publish warning 3.50 m and danger 4.00 m. No login, CAPTCHA, proxy, user-agent disguise or access bypass is used. `/robots.txt` returned 404; the public observation form required no acceptance of the separate historical-data request terms. On an HTTP block/error the poller stops and retains the previous successful snapshot, rather than working around access restrictions.
+The public page https://dhm.gov.np/hydrology/hms-Single/50 identifies Bagmati at Khokana, station 550.05, series ID 927. Its normal anonymous VIEW form posts to https://dhm.gov.np/site/getRiverWatchBySeriesId_Single with date, period=4 (7 Days Point), seriesid=927 and the public page's anonymous CSRF form token. The HTTP 200 response is JSON containing chart/table HTML. The chart embeds hex-escaped JSON with explicit UTC timestamps and ten-minute observed water-level values. `floodwatch/live/observed_poll.py` decodes this JSON without executing JavaScript. The HTML table's ambiguous clock labels are not used for timestamps. The page/plot publish warning 3.50 m and danger 4.00 m. No login, CAPTCHA, proxy, user-agent disguise or access bypass is used. `/robots.txt` returned 404; the public observation form required no acceptance of the separate historical-data request terms. On an HTTP block/error the poller stops and retains the previous successful snapshot, rather than working around access restrictions.
 
 Each fetch stores exact page HTML, exact JSON response bytes, source identity, request date/period, UTC fetch time, response hashes, parsed observations, hourly data and summary in `data/live/snapshots/observed_<timestamp>/`. `data/live/observed_latest.json` points only to a validated successful snapshot. The source supplies a seven-calendar-day window with partial first/current days; hourly bins are means of the available ten-minute observations, include sample counts and partial-hour flags, and retain absent hours as NaN. There is no filling or interpolation. Latest-reading metrics show the last actual point rather than the hourly mean. All displayed times are explicitly Asia/Kathmandu, and observations older than three hours receive a stale-data warning. The first saved operational observation snapshot has 952 readings and 160 hourly bins, latest 0.941 m at 2026-10-18 14:35 UTC / 20:20 Nepal time.
 
@@ -306,11 +347,11 @@ Using the existing read-only Earth Engine session on `bdasem-7`, the most recent
 
 The read-only listing of public `NASA/GPM_L3` assets contained IMERG V04/V05/V06/V07, the legacy IMERG asset and monthly/daily older products, but no separately named Early/Late-run collection. NASA's Early/Late products exist outside that listing; their published latency is not evidence that they are accessible as a newer Earth Engine collection. Next step: recheck V07 ingestion freshness and locate a documented, publicly accessible Early/Late route if needed, without new login or terms violations. Only if actual available image latency is under 48 hours should a 14-day basin satellite panel be built, with complete Kathmandu-day integration and explicit latency/provisional status. See `outputs/live/observed_investigation/` for saved page, XHR, public asset listing and timestamp evidence; [Earth Engine V07 catalogue](https://developers.google.com/earth-engine/datasets/catalog/NASA_GPM_L3_IMERG_V07).
 
-`stage_live_check.py` now also forbids network during independent observed-JSON decoding, verifies source hashes, source-to-display latest level/time and warning/danger thresholds, manually reproduces every hourly average/sample count, and checks satellite freshness exclusion. Both model and observation refresh buttons are tested with mocked pollers. Result: **7 PASS, 0 WARN, 0 FAIL**. The poller for GFS/GloFAS, app tab wrapper, Big data/replay tabs, model weights, features and thresholds are unchanged.
+`floodwatch/checks/stage_live_check.py` now also forbids network during independent observed-JSON decoding, verifies source hashes, source-to-display latest level/time and warning/danger thresholds, manually reproduces every hourly average/sample count, and checks satellite freshness exclusion. Both model and observation refresh buttons are tested with mocked pollers. Result: **7 PASS, 0 WARN, 0 FAIL**. The poller for GFS/GloFAS, app tab wrapper, Big data/replay tabs, model weights, features and thresholds are unchanged.
 
 ```sh
-venv/bin/python observed_poll.py
-venv/bin/python stage_live_check.py
+venv/bin/python -m floodwatch.live.observed_poll
+venv/bin/python -m floodwatch.checks.stage_live_check
 venv/bin/streamlit run app.py
 ```
 
