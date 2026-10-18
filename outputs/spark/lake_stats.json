@@ -1,0 +1,88 @@
+{
+  "rows": 5128008,
+  "partitions": 80,
+  "parquet_files": 80,
+  "parquet_bytes": 14543819,
+  "raw_json_bytes": 87244506,
+  "cached_hourly_files": 37,
+  "variables": [
+    {
+      "source": "era5_tcwv",
+      "variable": "total_column_integrated_water_vapour",
+      "rows": 1972296,
+      "non_null": 1932984
+    },
+    {
+      "source": "stage1_best_match",
+      "variable": "soil_moisture_0_to_7cm",
+      "rows": 788832,
+      "non_null": 788832
+    },
+    {
+      "source": "gfs_probe",
+      "variable": "total_column_integrated_water_vapour",
+      "rows": 48,
+      "non_null": 48
+    },
+    {
+      "source": "stage1_best_match",
+      "variable": "precipitation",
+      "rows": 788832,
+      "non_null": 788832
+    },
+    {
+      "source": "stage1_best_match",
+      "variable": "soil_moisture_7_to_28cm",
+      "rows": 788832,
+      "non_null": 788832
+    },
+    {
+      "source": "stage1_best_match",
+      "variable": "soil_moisture_28_to_100cm",
+      "rows": 788832,
+      "non_null": 788832
+    },
+    {
+      "source": "gfs_probe",
+      "variable": "soil_moisture_40_to_100cm",
+      "rows": 48,
+      "non_null": 48
+    },
+    {
+      "source": "gfs_probe",
+      "variable": "precipitation",
+      "rows": 48,
+      "non_null": 48
+    },
+    {
+      "source": "gfs_probe",
+      "variable": "soil_moisture_10_to_40cm",
+      "rows": 48,
+      "non_null": 48
+    },
+    {
+      "source": "gfs_probe",
+      "variable": "soil_moisture_0_to_10cm",
+      "rows": 48,
+      "non_null": 48
+    },
+    {
+      "source": "gfs_probe",
+      "variable": "soil_moisture_7_to_28cm",
+      "rows": 48,
+      "non_null": 0
+    },
+    {
+      "source": "gfs_probe",
+      "variable": "soil_moisture_28_to_100cm",
+      "rows": 48,
+      "non_null": 0
+    },
+    {
+      "source": "gfs_probe",
+      "variable": "soil_moisture_0_to_7cm",
+      "rows": 48,
+      "non_null": 0
+    }
+  ]
+}

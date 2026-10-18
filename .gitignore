@@ -1,0 +1,42 @@
+# Python environments and caches
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local settings and credentials
+.env
+.env.*
+!.env.example
+.DS_Store
+.idea/
+.vscode/
+
+# Local backups and reproducible raw/generated data
+_backups/
+data/raw/
+data/lake/
+data/live/
+data/dhm_history/
+
+# Runtime caches and databases
+.matplotlib/
+*.sqlite
+*.sqlite-*
+*.log
+
+# Raw investigation responses; retain the report used by the dashboard
+outputs/live/observed_investigation/*
+!outputs/live/observed_investigation/imerg_latest.json
+outputs/live/phase_b_probe/*.json
+outputs/live_preflight/*.json
+
+# Optional frontend dependencies and build outputs
+node_modules/
+web/.runtime/
+web/client/dist/
+web/server/dist/
+
+# Keep processed data, frozen models, saved reports, and integrity baselines.
+# Do not ignore outputs/ or JSON/CSV/PNG files globally.

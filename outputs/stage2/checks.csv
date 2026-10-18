@@ -1,0 +1,16 @@
+status,message
+PASS,9131 daily rows; Stage 1b inputs including TCWV NaNs preserved
+PASS,GloFAS labels use q_north > 445.191 m³/s; threshold fitted on training monsoons only
+PASS,26 flood events (warning threshold: 15)
+PASS,"Flood membership, event bounds and peaks consistent; events separated by at least seven dry days"
+PASS,"Outside June–October: 0 flood days, 0 events"
+PASS,"Annual event counts cover every year, including zero-event years"
+PASS,"September 2024 event detected: start 2024-09-28, peak 2024-09-28; excluded from training"
+PASS,"No test-year leakage: truncating input at 2019 leaves labels, threshold and calendar climatology unchanged"
+PASS,"Every variable has complete -14 to +3 windows; values match source dates, including NaNs"
+PASS,Composites skip NaNs with paired sample counts; no missing observations become zeros
+PASS,TCWV source gap affects 0 event-window observations; retained as NaN and skipped in composite means
+PASS,0 observed window values have no monsoon calendar-day baseline (season edges); excluded from paired means
+PASS,Precursor timing uses first pre-event crossing above calendar-day 75th percentile
+PASS,"13 plots saved, including September 2024 labels"
+PASS,"Conditional probabilities: training-only percentiles, day counts and future onset counts verified for both populations"

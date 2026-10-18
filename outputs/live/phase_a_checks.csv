@@ -1,0 +1,8 @@
+status,message
+PASS,"Snapshot and daily values: Raw response hashes valid; independent nine-point, 24-hour calculation reproduces all 22 days"
+PASS,"SQLite reproducibility: Saved CSV, summary and SQLite row exactly reproduce snapshot; model scores remain null"
+PASS,Monitor values and exceedance statement: Seven future days; threshold 445.191 m³/s; No forecast day exceeds the flood threshold
+PASS,Frozen hashes and existing tabs: 80 original manifest entries verified (79 current files + original app snapshot); authorized wrapper only; replay and Big data tabs unchanged
+PASS,"Observed DHM snapshot and hourly chart: DHM raw hashes, 952 ten-minute readings, 160 hourly bins, latest level/time, published 3.50/4.00 m levels and display reproduce saved responses; no filling"
+PASS,Satellite freshness gate: Latest IMERG at investigation was 49.4 h old (>48 h); no stale rainfall series added or used for scoring
+PASS,Streamlit rendering and button: All three tabs render offline; model/observed displays reproduce snapshots; both fetch buttons invoke their pollers (mocked)

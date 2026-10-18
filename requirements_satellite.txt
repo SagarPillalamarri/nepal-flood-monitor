@@ -1,0 +1,2 @@
+# Optional validation-only dependency; not required to run the frozen dashboard.
+earthengine-api==1.7.48

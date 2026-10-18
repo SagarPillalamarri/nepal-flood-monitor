@@ -1,0 +1,21 @@
+category,column,n_compared,max_absolute_difference,null_mask_mismatches
+Hourly to daily,precipitation,3651,2.842170943040401e-14,0
+Hourly to daily,soil_moisture_0_to_7cm,3652,1.6653345369377348e-16,0
+Hourly to daily,soil_moisture_28_to_100cm,3652,1.6653345369377348e-16,0
+Hourly to daily,soil_moisture_7_to_28cm,3652,1.6653345369377348e-16,0
+Hourly to daily,total_column_integrated_water_vapour,8948,2.1316282072803006e-14,0
+Rolling rainfall,hourly_rain_14d,3638,2.2737367544323206e-13,0
+Rolling rainfall,hourly_rain_1d,3651,0.0,0
+Rolling rainfall,hourly_rain_3d,3649,5.684341886080802e-14,0
+Rolling rainfall,hourly_rain_7d,3645,1.1368683772161603e-13,0
+Rolling rainfall,rain_14d,9118,3.410605131648481e-13,0
+Rolling rainfall,rain_1d,9131,0.0,0
+Rolling rainfall,rain_3d,9129,5.684341886080802e-14,0
+Rolling rainfall,rain_7d,9125,2.2737367544323206e-13,0
+Seasonal percentile,rain_14d_pct,3825,5.009326287108706e-13,0
+Seasonal percentile,rain_1d_pct,3825,5.009326287108706e-13,0
+Seasonal percentile,rain_3d_pct,3825,5.009326287108706e-13,0
+Seasonal percentile,rain_7d_pct,3825,5.009326287108706e-13,0
+Seasonal percentile,rain_max_point_pct,3825,5.009326287108706e-13,0
+Seasonal percentile,sm_0_7_pct,3825,5.009326287108706e-13,0
+Seasonal percentile,tcwv_pct,3794,4.974493039711092e-13,0

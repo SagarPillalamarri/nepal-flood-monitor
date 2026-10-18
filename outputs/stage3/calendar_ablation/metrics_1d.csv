@@ -1,0 +1,5 @@
+horizon,variant,split,n_days,positives,tp,fp,fn,tn,recall,precision,false_alarm_rate,false_alarm_ratio,f1,events_evaluable,events_detected,event_recall,mean_lead_days,mean_validation_f1,selected_by_validation
+1,with_monsoon_day,case,27,1,0,0,1,26,0.0,0.0,0.0,,0.0,1,0,0.0,,0.09523809523809523,False
+1,with_monsoon_day,test,880,6,3,14,3,860,0.5,0.17647058823529413,0.016018306636155607,0.8235294117647058,0.2608695652173913,6,3,0.5,1.0,0.09523809523809523,False
+1,without_monsoon_day,case,27,1,0,0,1,26,0.0,0.0,0.0,,0.0,1,0,0.0,,0.0989010989010989,True
+1,without_monsoon_day,test,880,6,3,33,3,841,0.5,0.08333333333333333,0.03775743707093822,0.9166666666666666,0.14285714285714285,6,3,0.5,1.0,0.0989010989010989,True

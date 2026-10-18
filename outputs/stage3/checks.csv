@@ -1,0 +1,27 @@
+horizon,status,message
+1,PASS,Percentile reference is 2001–2019 monsoon only; no 2020–2025 values
+1,PASS,"Feature leakage checks: prefix invariance, trailing rainfall and backward discharge shifts pass"
+1,WARN,31 monsoon TCWV percentiles remain NaN; XGBoost receives NaN natively
+1,PASS,1-day target is onset in t+1 through t+1; verified directly against event dates
+1,PASS,"No training, test, case or validation row has an ongoing flood on day t"
+1,PASS,"Time split and label-window purge pass: 2877 train, 880 test, 27 separate case days"
+1,PASS,Three chronological validation folds and all threshold tuning remain inside training years
+1,PASS,Baseline and all XGBoost ablations use identical eligible dates; saved models reproduce scores and alerts
+1,PASS,"Recall, precision, false alarm rate FP/(FP+TN), F1 and event lead times verified"
+1,PASS,"Test baseline comparison: XGBoost F1=0.261, baseline F1=0.077; test events=6"
+1,PASS,ONI retained only as a reported ablation; primary model excludes ONI and is not selected on test results
+1,WARN,September 2024 onset: missed; earliest eligible warning lead=none day(s)
+1,PASS,"Feature importance, separate September risk/discharge plot and model files saved"
+3,PASS,Percentile reference is 2001–2019 monsoon only; no 2020–2025 values
+3,PASS,"Feature leakage checks: prefix invariance, trailing rainfall and backward discharge shifts pass"
+3,WARN,31 monsoon TCWV percentiles remain NaN; XGBoost receives NaN natively
+3,PASS,3-day target is onset in t+1 through t+3; verified directly against event dates
+3,PASS,"No training, test, case or validation row has an ongoing flood on day t"
+3,PASS,"Time split and label-window purge pass: 2877 train, 878 test, 27 separate case days"
+3,PASS,Three chronological validation folds and all threshold tuning remain inside training years
+3,PASS,Baseline and all XGBoost ablations use identical eligible dates; saved models reproduce scores and alerts
+3,PASS,"Recall, precision, false alarm rate FP/(FP+TN), F1 and event lead times verified"
+3,PASS,"Test baseline comparison: XGBoost F1=0.112, baseline F1=0.098; test events=6"
+3,PASS,ONI retained only as a reported ablation; primary model excludes ONI and is not selected on test results
+3,WARN,September 2024 onset: missed; earliest eligible warning lead=none day(s)
+3,PASS,"Feature importance, separate September risk/discharge plot and model files saved"

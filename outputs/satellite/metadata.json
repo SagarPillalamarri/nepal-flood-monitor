@@ -1,0 +1,17 @@
+{
+  "project": "bdasem-7",
+  "collection": "NASA/GPM_L3/IMERG_V07",
+  "band": "precipitation",
+  "bbox": [
+    85.28,
+    27.62,
+    85.44,
+    27.78
+  ],
+  "timezone": "Asia/Kathmandu",
+  "rows": 3825,
+  "integration": "49 overlapping half-hours: first/last 0.25 h, middle 47 at 0.5 h; total 24 h",
+  "spatial_mean": "native 0.1-degree pixel-area-weighted rectangle mean; full valid-area coverage required",
+  "provisional_days": 31,
+  "frozen_artifacts_verified": 80
+}

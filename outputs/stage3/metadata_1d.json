@@ -1,0 +1,129 @@
+{
+  "horizon": 1,
+  "target": "event onset in t+1 through t+h",
+  "ongoing_flood_days_excluded": true,
+  "input_hash": "32e1e4bed42a4103ed0dc99fbfcffb90009b06179f08f2997e823c83c0495a4a",
+  "train_start": "2001-01-01",
+  "train_end": "2019-12-31",
+  "test_start": "2020-01-01",
+  "test_end": "2025-12-31",
+  "separate_case_start": "2024-09-01",
+  "separate_case_end": "2024-09-30",
+  "feature_reference_end": "2019-12-31",
+  "validation_folds": [
+    [
+      "2009-12-31",
+      "2010-01-01",
+      "2012-12-31"
+    ],
+    [
+      "2012-12-31",
+      "2013-01-01",
+      "2015-12-31"
+    ],
+    [
+      "2015-12-31",
+      "2016-01-01",
+      "2019-12-31"
+    ]
+  ],
+  "xgb_params": {
+    "n_estimators": 150,
+    "max_depth": 2,
+    "learning_rate": 0.04,
+    "min_child_weight": 1,
+    "reg_lambda": 5,
+    "subsample": 1,
+    "colsample_bytree": 1,
+    "tree_method": "hist",
+    "n_jobs": 2,
+    "random_state": 42,
+    "objective": "binary:logistic",
+    "eval_metric": "logloss"
+  },
+  "primary_variant": "xgb_tcwv",
+  "models": {
+    "baseline": {
+      "threshold": 95.0,
+      "columns": [
+        "rain_3d_pct"
+      ],
+      "train_positive": 19,
+      "train_n": 2877
+    },
+    "xgb_core": {
+      "threshold": 0.6,
+      "columns": [
+        "rain_1d_pct",
+        "rain_3d_pct",
+        "rain_7d_pct",
+        "rain_14d_pct",
+        "rain_max_point_pct",
+        "sm_0_7_pct",
+        "sm_0_7",
+        "sm_0_7_change_7d",
+        "sm_7_28",
+        "sm_7_28_change_7d",
+        "sm_28_100",
+        "sm_28_100_change_7d",
+        "discharge",
+        "discharge_rise_1d",
+        "discharge_rise_3d",
+        "monsoon_day"
+      ],
+      "train_positive": 19,
+      "train_n": 2877
+    },
+    "xgb_tcwv": {
+      "threshold": 0.9,
+      "columns": [
+        "rain_1d_pct",
+        "rain_3d_pct",
+        "rain_7d_pct",
+        "rain_14d_pct",
+        "rain_max_point_pct",
+        "tcwv_pct",
+        "sm_0_7_pct",
+        "sm_0_7",
+        "sm_0_7_change_7d",
+        "sm_7_28",
+        "sm_7_28_change_7d",
+        "sm_28_100",
+        "sm_28_100_change_7d",
+        "discharge",
+        "discharge_rise_1d",
+        "discharge_rise_3d",
+        "monsoon_day"
+      ],
+      "train_positive": 19,
+      "train_n": 2877
+    },
+    "xgb_oni_ablation": {
+      "threshold": 0.9,
+      "columns": [
+        "rain_1d_pct",
+        "rain_3d_pct",
+        "rain_7d_pct",
+        "rain_14d_pct",
+        "rain_max_point_pct",
+        "tcwv_pct",
+        "sm_0_7_pct",
+        "sm_0_7",
+        "sm_0_7_change_7d",
+        "sm_7_28",
+        "sm_7_28_change_7d",
+        "sm_28_100",
+        "sm_28_100_change_7d",
+        "discharge",
+        "discharge_rise_1d",
+        "discharge_rise_3d",
+        "monsoon_day",
+        "oni"
+      ],
+      "train_positive": 19,
+      "train_n": 2877
+    }
+  },
+  "score_note": "Class-weighted uncalibrated scores, not calibrated flood probabilities",
+  "oni_policy": "Diagnostic ablation only; primary excludes ONI to avoid test-driven selection"
+}

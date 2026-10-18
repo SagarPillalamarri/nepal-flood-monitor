@@ -1,0 +1,50 @@
+{
+  "method": "Euclidean distance on flattened standardized physical-feature windows",
+  "features": [
+    "tcwv_pct",
+    "rain_1d_pct",
+    "rain_3d_pct",
+    "rain_7d_pct",
+    "sm_0_7",
+    "discharge_rise_1d"
+  ],
+  "window_days": 14,
+  "template_alignment": "for each event and lead 1..14, use the selected-length window ending that many days before onset",
+  "scaling": "per-feature mean and population standard deviation from 2001\u20132019 monsoon rows",
+  "candidate_rule": "leave-one-event-out for training selection; event onset must precede query for daily output",
+  "september_2024_rule": "only event onsets on or before 2023-12-31 are considered",
+  "missing_policy": "skip a query or template window if any date/feature is missing; no imputation",
+  "dtw_used": false,
+  "templates_saved": 360,
+  "matches_saved": 3825,
+  "matched_days": 3398,
+  "selection": {
+    "selected_window_days": 14,
+    "features": [
+      "tcwv_pct",
+      "rain_1d_pct",
+      "rain_3d_pct",
+      "rain_7d_pct",
+      "sm_0_7",
+      "discharge_rise_1d"
+    ],
+    "leave_one_event_out_queries": 76,
+    "hit_rates": {
+      "14": 0.3157894736842105,
+      "7": 0.23684210526315788
+    },
+    "hit_counts": {
+      "14": [
+        12,
+        38
+      ],
+      "7": [
+        9,
+        38
+      ]
+    },
+    "tie_rule": "choose 7-day window if hit rates tie",
+    "selection_period": "2001\u20132019 monsoon events only",
+    "case_template_cutoff": "2023-12-31"
+  }
+}

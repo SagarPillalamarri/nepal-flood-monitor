@@ -1,0 +1,117 @@
+[
+  {
+    "year": 2001,
+    "status": "DOWNLOADED",
+    "hours": 8760,
+    "non_null": {
+      "precipitation": 78840,
+      "soil_moisture_0_to_7cm": 78840,
+      "soil_moisture_7_to_28cm": 78840,
+      "soil_moisture_28_to_100cm": 78840
+    }
+  },
+  {
+    "year": 2002,
+    "status": "DOWNLOADED",
+    "hours": 8760,
+    "non_null": {
+      "precipitation": 78840,
+      "soil_moisture_0_to_7cm": 78840,
+      "soil_moisture_7_to_28cm": 78840,
+      "soil_moisture_28_to_100cm": 78840
+    }
+  },
+  {
+    "year": 2003,
+    "status": "DOWNLOADED",
+    "hours": 8760,
+    "non_null": {
+      "precipitation": 78840,
+      "soil_moisture_0_to_7cm": 78840,
+      "soil_moisture_7_to_28cm": 78840,
+      "soil_moisture_28_to_100cm": 78840
+    }
+  },
+  {
+    "year": 2004,
+    "status": "DOWNLOADED",
+    "hours": 8784,
+    "non_null": {
+      "precipitation": 79056,
+      "soil_moisture_0_to_7cm": 79056,
+      "soil_moisture_7_to_28cm": 79056,
+      "soil_moisture_28_to_100cm": 79056
+    }
+  },
+  {
+    "year": 2005,
+    "status": "DOWNLOADED",
+    "hours": 8760,
+    "non_null": {
+      "precipitation": 78840,
+      "soil_moisture_0_to_7cm": 78840,
+      "soil_moisture_7_to_28cm": 78840,
+      "soil_moisture_28_to_100cm": 78840
+    }
+  },
+  {
+    "year": 2006,
+    "status": "DOWNLOADED",
+    "hours": 8760,
+    "non_null": {
+      "precipitation": 78840,
+      "soil_moisture_0_to_7cm": 78840,
+      "soil_moisture_7_to_28cm": 78840,
+      "soil_moisture_28_to_100cm": 78840
+    }
+  },
+  {
+    "year": 2007,
+    "status": "DOWNLOADED",
+    "hours": 8760,
+    "non_null": {
+      "precipitation": 78840,
+      "soil_moisture_0_to_7cm": 78840,
+      "soil_moisture_7_to_28cm": 78840,
+      "soil_moisture_28_to_100cm": 78840
+    }
+  },
+  {
+    "year": 2008,
+    "status": "DOWNLOADED",
+    "hours": 8784,
+    "non_null": {
+      "precipitation": 79056,
+      "soil_moisture_0_to_7cm": 79056,
+      "soil_moisture_7_to_28cm": 79056,
+      "soil_moisture_28_to_100cm": 79056
+    }
+  },
+  {
+    "year": 2009,
+    "status": "DOWNLOADED",
+    "hours": 8760,
+    "non_null": {
+      "precipitation": 78840,
+      "soil_moisture_0_to_7cm": 78840,
+      "soil_moisture_7_to_28cm": 78840,
+      "soil_moisture_28_to_100cm": 78840
+    }
+  },
+  {
+    "year": 2010,
+    "status": "DOWNLOADED",
+    "hours": 8760,
+    "non_null": {
+      "precipitation": 78840,
+      "soil_moisture_0_to_7cm": 78840,
+      "soil_moisture_7_to_28cm": 78840,
+      "soil_moisture_28_to_100cm": 78840
+    }
+  },
+  {
+    "year": 2011,
+    "status": "RATE_LIMIT",
+    "reason": "{\"error\":true,\"reason\":\"Minutely API request limit exceeded. Please try again in one minute.\"}"
+  }
+]

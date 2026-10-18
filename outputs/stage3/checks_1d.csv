@@ -1,0 +1,14 @@
+status,message
+PASS,Percentile reference is 2001–2019 monsoon only; no 2020–2025 values
+PASS,"Feature leakage checks: prefix invariance, trailing rainfall and backward discharge shifts pass"
+WARN,31 monsoon TCWV percentiles remain NaN; XGBoost receives NaN natively
+PASS,1-day target is onset in t+1 through t+1; verified directly against event dates
+PASS,"No training, test, case or validation row has an ongoing flood on day t"
+PASS,"Time split and label-window purge pass: 2877 train, 880 test, 27 separate case days"
+PASS,Three chronological validation folds and all threshold tuning remain inside training years
+PASS,Baseline and all XGBoost ablations use identical eligible dates; saved models reproduce scores and alerts
+PASS,"Recall, precision, false alarm rate FP/(FP+TN), F1 and event lead times verified"
+PASS,"Test baseline comparison: XGBoost F1=0.261, baseline F1=0.077; test events=6"
+PASS,ONI retained only as a reported ablation; primary model excludes ONI and is not selected on test results
+WARN,September 2024 onset: missed; earliest eligible warning lead=none day(s)
+PASS,"Feature importance, separate September risk/discharge plot and model files saved"

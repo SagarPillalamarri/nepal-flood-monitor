@@ -1,0 +1,10 @@
+{
+  "days": 3825,
+  "imerg_mean_mm_day": 11.519722697143356,
+  "era5_mean_mm_day": 14.642779956427015,
+  "raw_correlation": 0.4941448748476784,
+  "percentile_correlation": 0.44219633262382985,
+  "provisional_days": 31,
+  "percentile_reference": "own source, 2001\u20132019 monsoon, \u00b115 calendar days",
+  "event_reference_note": "matched complete three-day windows; first two June days omitted from both sources because IMERG download is monsoon-only"
+}

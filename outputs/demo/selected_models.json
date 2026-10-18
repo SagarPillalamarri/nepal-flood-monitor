@@ -1,0 +1,53 @@
+{
+  "horizons": [
+    {
+      "horizon": 1,
+      "selected_variant": "without_monsoon_day",
+      "threshold": 0.7,
+      "columns": [
+        "rain_1d_pct",
+        "rain_3d_pct",
+        "rain_7d_pct",
+        "rain_14d_pct",
+        "rain_max_point_pct",
+        "tcwv_pct",
+        "sm_0_7_pct",
+        "sm_0_7",
+        "sm_0_7_change_7d",
+        "sm_7_28",
+        "sm_7_28_change_7d",
+        "sm_28_100",
+        "sm_28_100_change_7d",
+        "discharge",
+        "discharge_rise_1d",
+        "discharge_rise_3d"
+      ],
+      "selection_file": "/Users/sagarp/Documents/BDA_SEM 7/outputs/stage3/calendar_ablation/selection_1d.json"
+    },
+    {
+      "horizon": 3,
+      "selected_variant": "with_monsoon_day",
+      "threshold": 0.4,
+      "columns": [
+        "rain_1d_pct",
+        "rain_3d_pct",
+        "rain_7d_pct",
+        "rain_14d_pct",
+        "rain_max_point_pct",
+        "tcwv_pct",
+        "sm_0_7_pct",
+        "sm_0_7",
+        "sm_0_7_change_7d",
+        "sm_7_28",
+        "sm_7_28_change_7d",
+        "sm_28_100",
+        "sm_28_100_change_7d",
+        "discharge",
+        "discharge_rise_1d",
+        "discharge_rise_3d",
+        "monsoon_day"
+      ],
+      "selection_file": "/Users/sagarp/Documents/BDA_SEM 7/outputs/stage3/calendar_ablation/selection_3d.json"
+    }
+  ]
+}

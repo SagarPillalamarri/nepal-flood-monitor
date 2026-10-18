@@ -1,0 +1,24 @@
+[
+  {
+    "days": 3652,
+    "median": 0.0,
+    "p95": 0.9999999999999998,
+    "p95_absolute": 1.6433333333333298,
+    "max_absolute": 15.311111111111131,
+    "days_over_1mm": 365,
+    "days_over_1mm_unrounded": 366,
+    "mismatches": 1874,
+    "shift_hours": 0
+  },
+  {
+    "days": 3651,
+    "median": 0.0,
+    "p95": 1.7763568394002505e-15,
+    "p95_absolute": 3.552713678800501e-15,
+    "max_absolute": 2.842170943040401e-14,
+    "days_over_1mm": 0,
+    "days_over_1mm_unrounded": 0,
+    "mismatches": 0,
+    "shift_hours": 1
+  }
+]

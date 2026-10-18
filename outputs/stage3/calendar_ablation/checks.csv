@@ -1,0 +1,7 @@
+horizon,status,message
+1,PASS,Three chronological validation folds contain training years only; no ongoing floods or September data
+1,PASS,Validation-only thresholds and selection verified; mean F1 with/without monsoon_day=0.095/0.099; selected without_monsoon_day
+1,PASS,"Saved models reproduce scores, alerts and test/case metrics; both variants use identical dates"
+3,PASS,Three chronological validation folds contain training years only; no ongoing floods or September data
+3,PASS,Validation-only thresholds and selection verified; mean F1 with/without monsoon_day=0.119/0.094; selected with_monsoon_day
+3,PASS,"Saved models reproduce scores, alerts and test/case metrics; both variants use identical dates"

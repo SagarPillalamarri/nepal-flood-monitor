@@ -1,0 +1,13 @@
+variable,first_lag,days_before_event,left_censored,paired_events_at_crossing
+oni,,,False,0
+precip_max_point_mm,-8.0,8.0,False,26
+precip_mm,-8.0,8.0,False,26
+q_east,-14.0,14.0,True,26
+q_north,-14.0,14.0,True,26
+q_south,-14.0,14.0,True,26
+q_station,-14.0,14.0,True,26
+q_west,-14.0,14.0,True,26
+sm_0_7,,,False,0
+sm_28_100,,,False,0
+sm_7_28,,,False,0
+tcwv_mm,-2.0,2.0,False,26

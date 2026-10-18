@@ -1,0 +1,8 @@
+status,message
+PASS,"3825 complete monsoon days, each integrated over 24 Kathmandu hours from 49 overlapping intervals"
+PASS,Kathmandu boundary weights independently verified: 0.25 + 47×0.5 + 0.25 = 24 hours; no UTC-day substitution
+PASS,Each source uses its own 2001–2019 monsoon seasonal percentile reference (±15 calendar days); test years excluded
+PASS,All 26 event totals cover onset-3 through onset-1; full-calendar rolling and matched source-specific training references used
+WARN,31 days include non-permanent IMERG intervals; source status is retained in imerg_daily.csv
+WARN,"IMERG is a native 0.1-degree area-weighted bounding-box mean; ERA5 is the existing nine-point mean. IMERG is a separate satellite-derived estimate, not ground truth"
+PASS,80 frozen model/scoring artifacts verified unchanged; rainfall comparison plot saved

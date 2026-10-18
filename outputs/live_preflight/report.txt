@@ -1,0 +1,10 @@
+[PASS] 80 frozen model/scoring artifacts verified unchanged
+[FAIL] historical: required soil_moisture_0_to_7cm: 0/24 non-null hours
+[FAIL] historical: required soil_moisture_7_to_28cm: 0/24 non-null hours
+[FAIL] historical: required soil_moisture_28_to_100cm: 0/24 non-null hours
+[FAIL] forecast: required soil_moisture_0_to_7cm: 0/24 non-null hours
+[FAIL] forecast: required soil_moisture_7_to_28cm: 0/24 non-null hours
+[FAIL] forecast: required soil_moisture_28_to_100cm: 0/24 non-null hours
+[STOP] Exact required GFS inputs are unavailable; no substitution, calibration or live scoring attempted.
+Native GFS soil values above are availability evidence only; they were not used as substitute model inputs.
+Summary: 1 PASS, 0 WARN, 6 FAIL

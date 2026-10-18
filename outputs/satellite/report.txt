@@ -1,0 +1,56 @@
+[PASS] 3825 complete monsoon days, each integrated over 24 Kathmandu hours from 49 overlapping intervals
+[PASS] Kathmandu boundary weights independently verified: 0.25 + 47×0.5 + 0.25 = 24 hours; no UTC-day substitution
+[PASS] Each source uses its own 2001–2019 monsoon seasonal percentile reference (±15 calendar days); test years excluded
+
+DAILY RAINFALL, 20–30 SEPTEMBER 2024 (mm/day):
+            imerg_mm  era5_mm
+date                         
+2024-09-20    21.154    2.044
+2024-09-21     1.301    7.856
+2024-09-22     0.761    0.667
+2024-09-23     0.380    1.156
+2024-09-24    19.661    3.156
+2024-09-25    16.781    9.722
+2024-09-26    19.943   40.289
+2024-09-27   174.366  196.933
+2024-09-28   194.668  110.600
+2024-09-29     1.513    1.978
+2024-09-30     0.462    1.133
+
+MONSOON MEAN, 2001–2025: IMERG=11.520 mm/day; ERA5=14.643 mm/day; days=3825
+DAILY MONSOON CORRELATION: raw Pearson r=0.4941; seasonal-percentile Pearson r=0.4422; days=3825
+
+THREE-DAY RAINFALL STRICTLY BEFORE EACH ONSET (source-specific training seasonal percentile):
+ event_id      onset       peak  imerg_3day_mm  era5_3day_mm  imerg_3day_pct  era5_3day_pct
+        1 2001-08-23 2001-08-23          61.49         46.16           77.67          56.45
+        2 2002-07-21 2002-07-22          67.59         52.36           79.71          38.79
+        3 2003-06-30 2003-06-30          46.13         67.66           70.71          69.69
+        4 2003-07-08 2003-07-08          13.46         39.98            9.76          22.50
+        5 2003-08-18 2003-08-18          48.80         47.84           67.66          54.92
+        6 2005-07-16 2005-07-16          50.11         53.52           61.54          38.96
+        7 2007-07-20 2007-07-26          65.31         74.48           77.16          70.71
+        8 2009-07-29 2009-07-29         100.19        140.23           93.12          93.29
+        9 2009-08-18 2009-08-19          58.29         68.87           74.96          79.20
+       10 2010-07-11 2010-07-11          24.89        128.81           27.93          89.39
+       11 2011-07-01 2011-07-01          65.62        103.12           84.47          86.50
+       12 2012-06-24 2012-06-24          44.95         61.22           75.98          70.71
+       13 2012-07-19 2012-07-19          18.87         99.96           12.99          84.97
+       14 2014-06-30 2014-06-30          15.98        102.27           25.55          86.84
+       15 2014-08-14 2014-08-14          33.87         67.83           44.40          74.96
+       16 2017-08-11 2017-08-12          66.65        119.94           80.39          90.92
+       17 2018-07-02 2018-07-02          22.75         71.10           33.36          71.05
+       18 2018-08-24 2018-08-24          84.56        157.83           90.75          95.67
+       19 2019-07-12 2019-07-12          55.92        190.64           68.68          95.33
+       20 2020-07-10 2020-07-10          69.87        110.99           82.17          85.91
+       21 2020-07-23 2020-07-23         148.84        233.44           97.79          97.28
+       22 2020-09-23 2020-09-23          33.77         34.88           73.51          70.46
+       23 2021-07-01 2021-07-01          27.35         75.22           44.31          73.85
+       24 2021-07-17 2021-07-17          20.35         83.30           15.45          73.17
+       25 2021-08-14 2021-08-14          15.10         92.92           10.36          85.74
+       26 2024-09-28 2024-09-28         211.09        246.94          100.00         100.00
+[PASS] All 26 event totals cover onset-3 through onset-1; full-calendar rolling and matched source-specific training references used
+[WARN] 31 days include non-permanent IMERG intervals; source status is retained in imerg_daily.csv
+[WARN] IMERG is a native 0.1-degree area-weighted bounding-box mean; ERA5 is the existing nine-point mean. IMERG is a separate satellite-derived estimate, not ground truth
+[PASS] 80 frozen model/scoring artifacts verified unchanged; rainfall comparison plot saved
+
+Summary: 5 PASS, 2 WARN, 0 FAIL

@@ -1,0 +1,15 @@
+{
+  "source": "GloFAS",
+  "point": "q_north",
+  "threshold": 445.19100000000043,
+  "quantile": 0.99,
+  "comparison": "discharge > threshold",
+  "reference_start": "2001-01-01",
+  "reference_end": "2019-12-31",
+  "reference_days": 2907,
+  "event_dry_days": 7,
+  "alignment": "first flood day",
+  "climatology_start": "2001-01-01",
+  "climatology_end": "2019-12-31",
+  "nan_policy": "skip NaN and report paired counts; never zero-fill"
+}

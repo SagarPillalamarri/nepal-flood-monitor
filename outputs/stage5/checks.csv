@@ -1,0 +1,4 @@
+status,message
+PASS,"Replay covers all 30 September dates with rainfall, TCWV percentile, soil moisture, discharge and flood labels"
+PASS,"Replay scores, selected thresholds and alerts match saved validation-selected model outputs; ongoing flood days are unscored"
+PASS,Replay analogue event and lead fields match Stage 4 and use pre-2024 templates

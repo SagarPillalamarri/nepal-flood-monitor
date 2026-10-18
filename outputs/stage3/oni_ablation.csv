@@ -1,0 +1,5 @@
+horizon,split,f1_without_oni,f1_with_oni,f1_change,improves_test,primary_uses_oni
+1,test,0.2608695652173913,0.375,0.1141304347826087,True,False
+1,case,0.0,0.0,0.0,False,False
+3,test,0.1116279069767441,0.1641791044776119,0.052551197500867786,True,False
+3,case,0.0,0.0,0.0,False,False

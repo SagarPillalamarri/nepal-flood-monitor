@@ -1,0 +1,342 @@
+[
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/spark_weather/stage1_best_match_2001.json",
+    "bytes": 3604563,
+    "points": 9,
+    "variables": [
+      "precipitation",
+      "soil_moisture_0_to_7cm",
+      "soil_moisture_28_to_100cm",
+      "soil_moisture_7_to_28cm"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/spark_weather/stage1_best_match_2002.json",
+    "bytes": 3604342,
+    "points": 9,
+    "variables": [
+      "precipitation",
+      "soil_moisture_0_to_7cm",
+      "soil_moisture_28_to_100cm",
+      "soil_moisture_7_to_28cm"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/spark_weather/stage1_best_match_2003.json",
+    "bytes": 3604393,
+    "points": 9,
+    "variables": [
+      "precipitation",
+      "soil_moisture_0_to_7cm",
+      "soil_moisture_28_to_100cm",
+      "soil_moisture_7_to_28cm"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/spark_weather/stage1_best_match_2004.json",
+    "bytes": 3614465,
+    "points": 9,
+    "variables": [
+      "precipitation",
+      "soil_moisture_0_to_7cm",
+      "soil_moisture_28_to_100cm",
+      "soil_moisture_7_to_28cm"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/spark_weather/stage1_best_match_2005.json",
+    "bytes": 3603834,
+    "points": 9,
+    "variables": [
+      "precipitation",
+      "soil_moisture_0_to_7cm",
+      "soil_moisture_28_to_100cm",
+      "soil_moisture_7_to_28cm"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/spark_weather/stage1_best_match_2006.json",
+    "bytes": 3604585,
+    "points": 9,
+    "variables": [
+      "precipitation",
+      "soil_moisture_0_to_7cm",
+      "soil_moisture_28_to_100cm",
+      "soil_moisture_7_to_28cm"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/spark_weather/stage1_best_match_2007.json",
+    "bytes": 3604498,
+    "points": 9,
+    "variables": [
+      "precipitation",
+      "soil_moisture_0_to_7cm",
+      "soil_moisture_28_to_100cm",
+      "soil_moisture_7_to_28cm"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/spark_weather/stage1_best_match_2008.json",
+    "bytes": 3614640,
+    "points": 9,
+    "variables": [
+      "precipitation",
+      "soil_moisture_0_to_7cm",
+      "soil_moisture_28_to_100cm",
+      "soil_moisture_7_to_28cm"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/spark_weather/stage1_best_match_2009.json",
+    "bytes": 3604750,
+    "points": 9,
+    "variables": [
+      "precipitation",
+      "soil_moisture_0_to_7cm",
+      "soil_moisture_28_to_100cm",
+      "soil_moisture_7_to_28cm"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/spark_weather/stage1_best_match_2010.json",
+    "bytes": 3604660,
+    "points": 9,
+    "variables": [
+      "precipitation",
+      "soil_moisture_0_to_7cm",
+      "soil_moisture_28_to_100cm",
+      "soil_moisture_7_to_28cm"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2001-01-01_2001-12-31.json",
+    "bytes": 2045658,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2002-01-01_2002-12-31.json",
+    "bytes": 2048383,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2003-01-01_2003-12-31.json",
+    "bytes": 2043357,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2004-01-01_2004-12-31.json",
+    "bytes": 2052571,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2005-01-01_2005-12-31.json",
+    "bytes": 2043793,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2006-01-01_2006-12-31.json",
+    "bytes": 2045085,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2007-01-01_2007-12-31.json",
+    "bytes": 2046294,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2008-01-01_2008-12-31.json",
+    "bytes": 2051718,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2009-01-01_2009-12-31.json",
+    "bytes": 2047004,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2010-01-01_2010-12-31.json",
+    "bytes": 2043985,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2011-01-01_2011-12-31.json",
+    "bytes": 2044342,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2012-01-01_2012-12-31.json",
+    "bytes": 2047438,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2013-01-01_2013-12-31.json",
+    "bytes": 2043782,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2014-01-01_2014-12-31.json",
+    "bytes": 2044533,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2015-01-01_2015-12-31.json",
+    "bytes": 2045676,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2016-01-01_2016-12-31.json",
+    "bytes": 2053007,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2017-01-01_2017-12-31.json",
+    "bytes": 2046001,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2018-01-01_2018-12-31.json",
+    "bytes": 2045892,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2019-01-01_2019-12-31.json",
+    "bytes": 2045626,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2020-01-01_2020-12-31.json",
+    "bytes": 2051036,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2021-01-01_2021-12-31.json",
+    "bytes": 2043456,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2022-01-01_2022-12-31.json",
+    "bytes": 2047190,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2023-01-01_2023-12-31.json",
+    "bytes": 2046700,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2024_preserved_valid_hours.json",
+    "bytes": 2055810,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/data/raw/stage1b/era5_tcwv_2025-01-01_2025-12-31.json",
+    "bytes": 2046870,
+    "points": 9,
+    "variables": [
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/outputs/live_preflight/forecast_response.json",
+    "bytes": 2281,
+    "points": 1,
+    "variables": [
+      "precipitation",
+      "soil_moisture_0_to_10cm",
+      "soil_moisture_0_to_7cm",
+      "soil_moisture_10_to_40cm",
+      "soil_moisture_28_to_100cm",
+      "soil_moisture_40_to_100cm",
+      "soil_moisture_7_to_28cm",
+      "total_column_integrated_water_vapour"
+    ]
+  },
+  {
+    "path": "/Users/sagarp/Documents/BDA_SEM 7/outputs/live_preflight/historical_response.json",
+    "bytes": 2288,
+    "points": 1,
+    "variables": [
+      "precipitation",
+      "soil_moisture_0_to_10cm",
+      "soil_moisture_0_to_7cm",
+      "soil_moisture_10_to_40cm",
+      "soil_moisture_28_to_100cm",
+      "soil_moisture_40_to_100cm",
+      "soil_moisture_7_to_28cm",
+      "total_column_integrated_water_vapour"
+    ]
+  }
+]

@@ -1,0 +1,5 @@
+[PASS] Both tabs render without exceptions; Spark imports blocked throughout
+[PASS] Big data tab renders lake metrics, variable coverage, parity, rainfall correction, SQL, scaling and physical plan
+[PASS] Original replay body is byte-for-byte unchanged; date slider works with all six original metrics
+[PASS] 79 frozen non-app artifacts and 4 paused live-work files unchanged; original app snapshot matches its frozen hash
+Summary: 4 PASS, 0 WARN, 0 FAIL

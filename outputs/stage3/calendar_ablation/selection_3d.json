@@ -1,0 +1,66 @@
+{
+  "horizon": 3,
+  "selected_variant": "with_monsoon_day",
+  "selection_rule": "higher mean F1 across the three chronological training validation folds; exact tie selects without monsoon_day",
+  "threshold_rule": "pooled out-of-fold validation F1; then precision; then higher threshold",
+  "validation_years_only": true,
+  "september_used_for_selection": false,
+  "input_hash": "32e1e4bed42a4103ed0dc99fbfcffb90009b06179f08f2997e823c83c0495a4a",
+  "models": {
+    "with_monsoon_day": {
+      "threshold": 0.4,
+      "columns": [
+        "rain_1d_pct",
+        "rain_3d_pct",
+        "rain_7d_pct",
+        "rain_14d_pct",
+        "rain_max_point_pct",
+        "tcwv_pct",
+        "sm_0_7_pct",
+        "sm_0_7",
+        "sm_0_7_change_7d",
+        "sm_7_28",
+        "sm_7_28_change_7d",
+        "sm_28_100",
+        "sm_28_100_change_7d",
+        "discharge",
+        "discharge_rise_1d",
+        "discharge_rise_3d",
+        "monsoon_day"
+      ],
+      "mean_validation_f1": 0.11878418721757095,
+      "validation_fold_f1": [
+        0.1782178217821782,
+        0.061855670103092786,
+        0.11627906976744186
+      ]
+    },
+    "without_monsoon_day": {
+      "threshold": 0.5,
+      "columns": [
+        "rain_1d_pct",
+        "rain_3d_pct",
+        "rain_7d_pct",
+        "rain_14d_pct",
+        "rain_max_point_pct",
+        "tcwv_pct",
+        "sm_0_7_pct",
+        "sm_0_7",
+        "sm_0_7_change_7d",
+        "sm_7_28",
+        "sm_7_28_change_7d",
+        "sm_28_100",
+        "sm_28_100_change_7d",
+        "discharge",
+        "discharge_rise_1d",
+        "discharge_rise_3d"
+      ],
+      "mean_validation_f1": 0.0936661698956781,
+      "validation_fold_f1": [
+        0.18181818181818182,
+        0.05,
+        0.04918032786885246
+      ]
+    }
+  }
+}

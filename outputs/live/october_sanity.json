@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "historical_dates": "10\u201325 October, 2001\u20132025",
+  "historical_n": 400,
+  "historical": {
+    "q_north": {
+      "p10": 1.3780000000000001,
+      "median": 3.65,
+      "p90": 26.071000000000005
+    },
+    "q_station": {
+      "p10": 0.08,
+      "median": 0.21,
+      "p90": 1.5130000000000008
+    }
+  },
+  "live_dates": "2026-10-05 to 2026-10-18",
+  "live_n": 14,
+  "live": {
+    "p10": 3.567,
+    "median": 14.100000000000001,
+    "p90": 28.16
+  },
+  "within_historical_p10_p90": {
+    "q_north": 11,
+    "q_station": 0
+  },
+  "stage1_url": "https://flood-api.open-meteo.com/v1/flood?latitude=27.682222&longitude=85.293333&daily=river_discharge&start_date=2001-01-01&end_date=2025-12-31",
+  "live_url": "https://flood-api.open-meteo.com/v1/flood?latitude=27.682222&longitude=85.293333&daily=river_discharge&models=seamless_v4&start_date=2026-10-04&end_date=2026-10-25&timezone=GMT",
+  "control_max_absolute_difference": 0.0,
+  "parameter_note": "Coordinates identical. Stage 1 omitted models/timezone; live explicitly pins seamless_v4/GMT. Same-date Stage1-style control returns identical grid and all discharge values."
+}

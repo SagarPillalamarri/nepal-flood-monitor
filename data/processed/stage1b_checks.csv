@@ -1,0 +1,12 @@
+status,message
+WARN,ERA5 vs GFS percentile correlation deferred until after Monday; GFS calibration not run
+PASS,"NOAA ONI downloaded and validated; 9131 daily assignments, no missing values"
+PASS,ONI seasons end two months before scoring month; year boundaries checked
+WARN,"Confirmed Open-Meteo ERA5 source gap: 183 TCWV days remain NaN; 31 affected monsoon days (2024-06: 30, 2024-07: 1); no filling or interpolation"
+PASS,TCWV matches all-nine-point cached aggregation; incomplete days remain NaN
+PASS,"Complete merged output: 9131 days; Stage 1 unchanged, only tcwv_mm and oni added"
+PASS,ERA5 seasonal reference restricted to 2001-01-01 through 2019-12-31; monsoon days only
+PASS,2024-09-26: TCWV 44.60 mm; seasonal percentile 98.30
+PASS,2024-09-27: TCWV 45.23 mm; seasonal percentile 98.98
+PASS,2024-09-28: TCWV 44.64 mm; seasonal percentile 98.98
+PASS,TCWV prefix invariance: future input days do not change earlier features

@@ -1,0 +1,92 @@
+[
+  {
+    "scale": 1,
+    "input_rows": 5128008,
+    "seconds": 5.151602583995555,
+    "daily_rows": 23758,
+    "valid_daily_rows": 23555,
+    "checksum": 256053.14306944446,
+    "squared_checksum": 8325245.420482282,
+    "trial": 1
+  },
+  {
+    "scale": 1,
+    "input_rows": 5128008,
+    "seconds": 5.341952957998728,
+    "daily_rows": 23758,
+    "valid_daily_rows": 23555,
+    "checksum": 256053.14306944446,
+    "squared_checksum": 8325245.420482282,
+    "trial": 2
+  },
+  {
+    "scale": 1,
+    "input_rows": 5128008,
+    "seconds": 5.32754179200856,
+    "daily_rows": 23758,
+    "valid_daily_rows": 23555,
+    "checksum": 256053.14306944446,
+    "squared_checksum": 8325245.420482282,
+    "trial": 3
+  },
+  {
+    "scale": 10,
+    "input_rows": 51280080,
+    "seconds": 30.451517583001987,
+    "daily_rows": 237580,
+    "valid_daily_rows": 235550,
+    "checksum": 2560531.4306944427,
+    "squared_checksum": 83252454.20482278,
+    "trial": 1
+  },
+  {
+    "scale": 10,
+    "input_rows": 51280080,
+    "seconds": 31.692759958008537,
+    "daily_rows": 237580,
+    "valid_daily_rows": 235550,
+    "checksum": 2560531.4306944427,
+    "squared_checksum": 83252454.20482278,
+    "trial": 2
+  },
+  {
+    "scale": 10,
+    "input_rows": 51280080,
+    "seconds": 29.720951124996645,
+    "daily_rows": 237580,
+    "valid_daily_rows": 235550,
+    "checksum": 2560531.4306944427,
+    "squared_checksum": 83252454.20482278,
+    "trial": 3
+  },
+  {
+    "scale": 50,
+    "input_rows": 256400400,
+    "seconds": 293.0329418330075,
+    "daily_rows": 1187900,
+    "valid_daily_rows": 1177750,
+    "checksum": 12802657.153472211,
+    "squared_checksum": 416262271.024115,
+    "trial": 1
+  },
+  {
+    "scale": 50,
+    "input_rows": 256400400,
+    "seconds": 206.81549045800057,
+    "daily_rows": 1187900,
+    "valid_daily_rows": 1177750,
+    "checksum": 12802657.153472211,
+    "squared_checksum": 416262271.024115,
+    "trial": 2
+  },
+  {
+    "scale": 50,
+    "input_rows": 256400400,
+    "seconds": 235.8417188750027,
+    "daily_rows": 1187900,
+    "valid_daily_rows": 1177750,
+    "checksum": 12802657.153472211,
+    "squared_checksum": 416262271.024115,
+    "trial": 3
+  }
+]

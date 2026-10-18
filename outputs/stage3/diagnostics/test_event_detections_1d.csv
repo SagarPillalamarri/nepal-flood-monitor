@@ -1,0 +1,7 @@
+event_id,onset,detected,lead_days
+20,2020-07-10,True,1.0
+21,2020-07-23,False,
+22,2020-09-23,False,
+23,2021-07-01,True,1.0
+24,2021-07-17,False,
+25,2021-08-14,True,1.0

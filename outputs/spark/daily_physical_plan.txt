@@ -1,0 +1,94 @@
+== Physical Plan ==
+AdaptiveSparkPlan (14)
++- Project (13)
+   +- HashAggregate (12)
+      +- Exchange (11)
+         +- HashAggregate (10)
+            +- Project (9)
+               +- HashAggregate (8)
+                  +- Exchange (7)
+                     +- HashAggregate (6)
+                        +- HashAggregate (5)
+                           +- Exchange (4)
+                              +- HashAggregate (3)
+                                 +- Project (2)
+                                    +- Scan parquet  (1)
+
+
+(1) Scan parquet 
+Output [7]: [timestamp#0, lat#1, lon#2, value#3, source#4, variable#8, year#9]
+Batched: true
+Location: InMemoryFileIndex [file:/Users/sagarp/Documents/BDA_SEM 7/data/lake/raw]
+ReadSchema: struct<timestamp:timestamp,lat:double,lon:double,value:double,source:string>
+
+(2) Project
+Output [7]: [timestamp#0, lat#1, lon#2, value#3, source#4, variable#8, cast(CASE WHEN (variable#8 = precipitation) THEN timestamp#0 + INTERVAL '-01' HOUR ELSE timestamp#0 END as date) AS date#11]
+Input [7]: [timestamp#0, lat#1, lon#2, value#3, source#4, variable#8, year#9]
+
+(3) HashAggregate
+Input [7]: [timestamp#0, lat#1, lon#2, value#3, source#4, variable#8, date#11]
+Keys [6]: [date#11, knownfloatingpointnormalized(normalizenanandzero(lat#1)) AS lat#1, knownfloatingpointnormalized(normalizenanandzero(lon#2)) AS lon#2, variable#8, source#4, timestamp#0]
+Functions [3]: [partial_avg(value#3), partial_sum(value#3), partial_count(value#3)]
+Aggregate Attributes [3]: [avg(value#3)#29, sum(value#3)#30, count(value#3)#28L]
+Results [10]: [date#11, lat#1, lon#2, variable#8, source#4, timestamp#0, sum#66, count#67L, sum#69, count#71L]
+
+(4) Exchange
+Input [10]: [date#11, lat#1, lon#2, variable#8, source#4, timestamp#0, sum#66, count#67L, sum#69, count#71L]
+Arguments: hashpartitioning(date#11, lat#1, lon#2, variable#8, source#4, timestamp#0, 10), ENSURE_REQUIREMENTS, [plan_id=34]
+
+(5) HashAggregate
+Input [10]: [date#11, lat#1, lon#2, variable#8, source#4, timestamp#0, sum#66, count#67L, sum#69, count#71L]
+Keys [6]: [date#11, lat#1, lon#2, variable#8, source#4, timestamp#0]
+Functions [3]: [merge_avg(value#3), merge_sum(value#3), merge_count(value#3)]
+Aggregate Attributes [3]: [avg(value#3)#29, sum(value#3)#30, count(value#3)#28L]
+Results [10]: [date#11, lat#1, lon#2, variable#8, source#4, timestamp#0, sum#66, count#67L, sum#69, count#71L]
+
+(6) HashAggregate
+Input [10]: [date#11, lat#1, lon#2, variable#8, source#4, timestamp#0, sum#66, count#67L, sum#69, count#71L]
+Keys [5]: [date#11, lat#1, lon#2, variable#8, source#4]
+Functions [4]: [merge_avg(value#3), merge_sum(value#3), merge_count(value#3), partial_count(distinct timestamp#0)]
+Aggregate Attributes [4]: [avg(value#3)#29, sum(value#3)#30, count(value#3)#28L, count(timestamp#0)#27L]
+Results [10]: [date#11, lat#1, lon#2, variable#8, source#4, sum#66, count#67L, sum#69, count#71L, count#74L]
+
+(7) Exchange
+Input [10]: [date#11, lat#1, lon#2, variable#8, source#4, sum#66, count#67L, sum#69, count#71L, count#74L]
+Arguments: hashpartitioning(date#11, lat#1, lon#2, variable#8, source#4, 10), ENSURE_REQUIREMENTS, [plan_id=38]
+
+(8) HashAggregate
+Input [10]: [date#11, lat#1, lon#2, variable#8, source#4, sum#66, count#67L, sum#69, count#71L, count#74L]
+Keys [5]: [date#11, lat#1, lon#2, variable#8, source#4]
+Functions [4]: [avg(value#3), sum(value#3), count(value#3), count(distinct timestamp#0)]
+Aggregate Attributes [4]: [avg(value#3)#29, sum(value#3)#30, count(value#3)#28L, count(timestamp#0)#27L]
+Results [6]: [date#11, variable#8, source#4, avg(value#3)#29 AS hour_mean#14, sum(value#3)#30 AS hour_sum#15, ((count(timestamp#0)#27L = 24) AND (count(value#3)#28L = 24)) AS complete#31]
+
+(9) Project
+Output [5]: [date#11, variable#8, source#4, complete#31, CASE WHEN complete#31 THEN CASE WHEN (variable#8 = precipitation) THEN hour_sum#15 ELSE hour_mean#14 END END AS point_daily#32]
+Input [6]: [date#11, variable#8, source#4, hour_mean#14, hour_sum#15, complete#31]
+
+(10) HashAggregate
+Input [5]: [date#11, variable#8, source#4, complete#31, point_daily#32]
+Keys [3]: [date#11, variable#8, source#4]
+Functions [4]: [partial_count(1), partial_sum(cast(complete#31 as int)), partial_avg(point_daily#32), partial_max(point_daily#32)]
+Aggregate Attributes [5]: [count#54L, sum#55L, sum#56, count#57L, max#58]
+Results [8]: [date#11, variable#8, source#4, count#59L, sum#60L, sum#61, count#62L, max#63]
+
+(11) Exchange
+Input [8]: [date#11, variable#8, source#4, count#59L, sum#60L, sum#61, count#62L, max#63]
+Arguments: hashpartitioning(date#11, variable#8, source#4, 10), ENSURE_REQUIREMENTS, [plan_id=43]
+
+(12) HashAggregate
+Input [8]: [date#11, variable#8, source#4, count#59L, sum#60L, sum#61, count#62L, max#63]
+Keys [3]: [date#11, variable#8, source#4]
+Functions [4]: [count(1), sum(cast(complete#31 as int)), avg(point_daily#32), max(point_daily#32)]
+Aggregate Attributes [4]: [count(1)#48L, sum(cast(complete#31 as int))#49L, avg(point_daily#32)#50, max(point_daily#32)#51]
+Results [7]: [date#11, variable#8, source#4, count(1)#48L AS n_points#33L, sum(cast(complete#31 as int))#49L AS complete_points#34L, avg(point_daily#32)#50 AS available_mean#35, max(point_daily#32)#51 AS available_max#36]
+
+(13) Project
+Output [9]: [date#11, variable#8, source#4, n_points#33L, complete_points#34L, available_mean#35, available_max#36, CASE WHEN ((n_points#33L = 9) AND (complete_points#34L = 9)) THEN available_mean#35 END AS value#52, CASE WHEN ((n_points#33L = 9) AND (complete_points#34L = 9)) THEN available_max#36 END AS max_point_value#53]
+Input [7]: [date#11, variable#8, source#4, n_points#33L, complete_points#34L, available_mean#35, available_max#36]
+
+(14) AdaptiveSparkPlan
+Output [9]: [date#11, variable#8, source#4, n_points#33L, complete_points#34L, available_mean#35, available_max#36, value#52, max_point_value#53]
+Arguments: isFinalPlan=false
+
+

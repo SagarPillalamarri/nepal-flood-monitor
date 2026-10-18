@@ -1,0 +1,17 @@
+endpoint,variable,required,rows,non_null,complete
+historical,precipitation,True,24,24,True
+historical,total_column_integrated_water_vapour,True,24,24,True
+historical,soil_moisture_0_to_7cm,True,24,0,False
+historical,soil_moisture_7_to_28cm,True,24,0,False
+historical,soil_moisture_28_to_100cm,True,24,0,False
+historical,soil_moisture_0_to_10cm,False,24,24,True
+historical,soil_moisture_10_to_40cm,False,24,24,True
+historical,soil_moisture_40_to_100cm,False,24,24,True
+forecast,precipitation,True,24,24,True
+forecast,total_column_integrated_water_vapour,True,24,24,True
+forecast,soil_moisture_0_to_7cm,True,24,0,False
+forecast,soil_moisture_7_to_28cm,True,24,0,False
+forecast,soil_moisture_28_to_100cm,True,24,0,False
+forecast,soil_moisture_0_to_10cm,False,24,24,True
+forecast,soil_moisture_10_to_40cm,False,24,24,True
+forecast,soil_moisture_40_to_100cm,False,24,24,True

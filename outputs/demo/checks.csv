@@ -1,0 +1,6 @@
+status,message
+PASS,26 onset/peak rows match frozen event catalogue
+PASS,Both selected and not-selected metrics match saved artifacts
+PASS,September replay table is an exact copy of frozen scoring output
+PASS,All seven report plots exist and decode successfully
+PASS,80 frozen artifacts remain unchanged

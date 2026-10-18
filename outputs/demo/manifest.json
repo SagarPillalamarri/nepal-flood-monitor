@@ -1,0 +1,13 @@
+{
+  "frozen_artifacts_verified": 80,
+  "satellite_validation_included": true,
+  "plots": [
+    "conditional_probabilities.png",
+    "sep2024_analogue_countdown.png",
+    "sep2024_imerg_vs_era5.png",
+    "sep2024_selected_risk_vs_discharge.png",
+    "tcwv_event_composite.png",
+    "xgboost_selected_1d_feature_importance.png",
+    "xgboost_selected_3d_feature_importance.png"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "selected_window_days": 14,
+  "features": [
+    "tcwv_pct",
+    "rain_1d_pct",
+    "rain_3d_pct",
+    "rain_7d_pct",
+    "sm_0_7",
+    "discharge_rise_1d"
+  ],
+  "leave_one_event_out_queries": 76,
+  "hit_rates": {
+    "14": 0.3157894736842105,
+    "7": 0.23684210526315788
+  },
+  "hit_counts": {
+    "14": [
+      12,
+      38
+    ],
+    "7": [
+      9,
+      38
+    ]
+  },
+  "tie_rule": "choose 7-day window if hit rates tie",
+  "selection_period": "2001\u20132019 monsoon events only",
+  "case_template_cutoff": "2023-12-31"
+}

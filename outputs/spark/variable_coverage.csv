@@ -1,0 +1,14 @@
+source,variable,start_year,end_year,rows,non_null_values
+era5_tcwv,total_column_integrated_water_vapour,2001,2025,1972296,1932984
+gfs_probe,precipitation,2024,2026,48,48
+gfs_probe,soil_moisture_0_to_10cm,2024,2026,48,48
+gfs_probe,soil_moisture_0_to_7cm,2024,2026,48,0
+gfs_probe,soil_moisture_10_to_40cm,2024,2026,48,48
+gfs_probe,soil_moisture_28_to_100cm,2024,2026,48,0
+gfs_probe,soil_moisture_40_to_100cm,2024,2026,48,48
+gfs_probe,soil_moisture_7_to_28cm,2024,2026,48,0
+gfs_probe,total_column_integrated_water_vapour,2024,2026,48,48
+stage1_best_match,precipitation,2001,2010,788832,788832
+stage1_best_match,soil_moisture_0_to_7cm,2001,2010,788832,788832
+stage1_best_match,soil_moisture_28_to_100cm,2001,2010,788832,788832
+stage1_best_match,soil_moisture_7_to_28cm,2001,2010,788832,788832
