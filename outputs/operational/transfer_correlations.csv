@@ -1,0 +1,5 @@
+variable,correlation,n_days,decision
+rain_3d,0.49565160964928895,765,dropped
+rain_7d,0.5143418888812075,765,WARN usable
+rain_14d,0.5093311173341643,765,WARN usable
+tcwv_2025_OOS,0.8657658794648413,153,usable

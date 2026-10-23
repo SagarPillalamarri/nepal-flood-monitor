@@ -1,0 +1,6 @@
+[PASS] /api/replay: every data value matches project source reader exactly; provenance present
+[PASS] /api/pipeline: every data value matches project source reader exactly; provenance present
+[PASS] /api/live: every data value matches project source reader exactly; provenance present
+[PASS] Independent CSV anchors: replay scores/thresholds and live values match exact floats; operational JSON matches SQLite-backed loader
+[PASS] 80 research manifest entries and frozen operational model/threshold hashes unchanged
+Summary: 5 PASS, 0 FAIL

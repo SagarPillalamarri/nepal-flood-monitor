@@ -1,0 +1,12 @@
+{
+  "columns": [
+    "rain_7d_pct",
+    "rain_14d_pct",
+    "tcwv_pct",
+    "discharge",
+    "discharge_rise_1d",
+    "discharge_rise_3d"
+  ],
+  "threshold": 0.8,
+  "training_end": "2019-12-31"
+}

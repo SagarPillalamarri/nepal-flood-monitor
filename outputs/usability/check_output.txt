@@ -1,0 +1,5 @@
+[PASS] Precursor numeric provenance: All panel values reproduce raw saved features, disjoint training counts, seasonal flow ranks and timestamped gauge data exactly; only displayed rounding applied
+[PASS] Staleness and combined refresh: Strict >6-hour boundary, stale summary suffix, comparison counts and dual-source refresh verified; rounding is presentation-only
+[PASS] Charts, metrics and plain-language layout: 8 chart call sites have explicit explanatory source captions; 17 rendered metrics have explanatory captions; all tabs have introductions and glossaries
+[PASS] Frozen data and calculations: 541 data, snapshot, model and template files byte-for-byte unchanged
+Summary: 4 PASS, 0 WARN, 0 FAIL

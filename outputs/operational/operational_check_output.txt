@@ -1,0 +1,5 @@
+[PASS] Fixed transfer decision rules select TCWV, rain 7d and 14d only
+[PASS] 1d: validation years, case separation, no ongoing floods, saved scores and thresholds verified
+[PASS] 3d: validation years, case separation, no ongoing floods, saved scores and thresholds verified
+[PASS] 80 original research artifact hashes verified
+Summary: 4 PASS, 0 WARN, 0 FAIL

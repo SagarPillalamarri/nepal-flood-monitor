@@ -1,0 +1,17 @@
+Complete monsoon days per year (out of 153):
+      precip_mm  tcwv_mm
+year                    
+2021        153        0
+2022        153        0
+2023        153        0
+2024        153       59
+2025        153      153
+ variable overlap_start overlap_end  n_days  percentile_correlation status  gfs_missing_days  era5_missing_days  insufficient_climatology_days
+precip_mm    2021-06-01  2025-10-31     765                0.475010   FAIL                 0                  0                              0
+  tcwv_mm    2024-09-03  2025-10-31     198                0.786627   PASS               553                 31                             14
+[PASS] 80 original frozen artifacts unchanged
+[PASS] ERA5 ranks use only 2001–2019; GFS ranks use only 2021–2025 monsoon values
+[PASS] Nine-point means require complete hourly observations; missing values are not filled
+[STOP] Calibration gate failed: correlation below 0.5/undefined or incomplete requested GFS climatology; operational training and scoring not started
+[WARN] GFS TCWV climatology is incomplete; its reported correlation covers supported seasonal windows only
+Summary: 4 PASS, 1 WARN, 1 FAIL

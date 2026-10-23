@@ -1,0 +1,6 @@
+{
+  "outputs/stage4/scaling_by_date.csv": "53c14a2c047e6dc71a415b29e306006fcc7a2f0e168c4358475982a0e0254bf1",
+  "outputs/stage4/templates.csv": "11aa81432e3fe93358222ab330ea1dc1b9c28daa6b9c817c16a7b311badd2d2c",
+  "/Users/sagarp/Documents/BDA_SEM 7/outputs/operational/analogue_templates.json": "4d37afc2f5e763890f35ead7b2509ce70fab0454e69e7a638dfec5a609dfa99e",
+  "/Users/sagarp/Documents/BDA_SEM 7/outputs/operational/analogue_scaler.json": "3455d1928b752089c14ae9f58b85e9e04616b29cc79205c76cb2a7ece7bfb965"
+}

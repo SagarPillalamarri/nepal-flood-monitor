@@ -1,0 +1,7 @@
+[PASS] Frozen models and research artifacts: 80 research manifest entries, 4 operational model/threshold hashes and 4 analogue template/scaler hashes unchanged
+[PASS] Snapshot and SQLite rescore: Raw hashes, feature/mapping/model provenance, saved score and SQLite reproduce offline rescore exactly
+[PASS] Feature identity and causality: Historical features match frozen training implementation; identical parsed/replayed inputs match; future rows cannot alter today
+[PASS] Leakage and template eligibility: Training/threshold folds end in 2019; no ongoing-flood evaluation rows; LOEO excludes held events; September templates pre-2024; 212-day refit is live-only
+[PASS] Close-match label rule: Training-only false-match cap <=10% verified; both hit rates <25%; resemblance labels suppressed; distance flags follow cutoff exactly
+[PASS] Streamlit integration: Three tabs render offline; observed gauge, operational score cards and forecast charts present
+Summary: 6 PASS, 0 WARN, 0 FAIL

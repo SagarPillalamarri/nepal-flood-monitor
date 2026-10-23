@@ -1,0 +1,10 @@
+date,analogue_status,score_1d,threshold_1d,score_3d,threshold_3d,event_id,event_onset,lead_days,distance,score_status,close_match_cutoff,is_close_match,label,nearest_note,display_enabled
+2024-09-20,matched,0.1160004660487175,0.8,0.0208906456828117,0.8,11,2011-07-01,5,4.031820185457422,scored,3.6858344516098085,False,Pattern matching not reliable enough to display (see README),,False
+2024-09-21,matched,0.0230359639972448,0.8,0.0094661628827452,0.8,11,2011-07-01,5,4.014897492021947,scored,3.6858344516098085,False,Pattern matching not reliable enough to display (see README),,False
+2024-09-22,matched,0.0271220579743385,0.8,0.0105184111744165,0.8,11,2011-07-01,4,4.128984088879711,scored,3.6858344516098085,False,Pattern matching not reliable enough to display (see README),,False
+2024-09-23,matched,0.0132495705038309,0.8,0.0105184111744165,0.8,11,2011-07-01,4,4.358654796407215,scored,3.6858344516098085,False,Pattern matching not reliable enough to display (see README),,False
+2024-09-24,matched,0.1160004660487175,0.8,0.0173655394464731,0.8,15,2014-08-14,2,4.641107778294598,scored,3.6858344516098085,False,Pattern matching not reliable enough to display (see README),,False
+2024-09-25,matched,0.0640233755111694,0.8,0.0081342831254005,0.8,11,2011-07-01,2,4.972702436695104,scored,3.6858344516098085,False,Pattern matching not reliable enough to display (see README),,False
+2024-09-26,matched,0.7636244893074036,0.8,0.2285438328981399,0.8,11,2011-07-01,2,4.973504565773562,scored,3.6858344516098085,False,Pattern matching not reliable enough to display (see README),,False
+2024-09-27,matched,0.6684046387672424,0.8,0.4030215144157409,0.8,11,2011-07-01,1,5.234753781888645,scored,3.6858344516098085,False,Pattern matching not reliable enough to display (see README),,False
+2024-09-28,matched,,0.8,,0.8,11,2011-07-01,1,8.501247006921037,ongoing_flood,3.6858344516098085,False,Pattern matching not reliable enough to display (see README),,False

@@ -1,0 +1,3 @@
+@import 'tailwindcss';
+:root{--canvas:#f7f8fa;--surface:#fff;--sidebar:#f1f3f5;--ink:#17252b;--muted:#71808a;--line:#e4e9ed;--accent:#127d79;--accent-soft:#e7f3f1;--accent-soft-strong:#92c6c0;--warning:#976316;--warning-bg:#fff7e8;--shadow:0 2px 6px #17252b03;--radius:16px;--font:'Helvetica Neue',Helvetica,Arial,sans-serif}
+:root[data-theme=dark]{--canvas:#10191e;--surface:#172329;--sidebar:#131e23;--ink:#e6eff2;--muted:#91a4ae;--line:#2a3940;--accent:#72c9bd;--accent-soft:#203c39;--accent-soft-strong:#467c76;--warning:#e5b765;--warning-bg:#332b20;--shadow:none}

@@ -22,13 +22,25 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def rebuild(snapshot):
+def rebuild(snapshot, full_history=False):
     """Deterministic offline parsing shared by the dashboard and checks."""
     snapshot = Path(snapshot)
     meta = json.loads((snapshot/'manifest.json').read_text())
     today = pd.Timestamp(meta['today'])
-    dates = pd.date_range(today-pd.Timedelta(days=14),today+pd.Timedelta(days=7),name='date')
+    dates = pd.date_range(meta['weather_start'],today+pd.Timedelta(days=7),name='date')
     payload = json.loads((snapshot/'weather.json').read_text())
+    history=snapshot/'weather_history.json'
+    if history.exists():
+        historical=json.loads(history.read_text())
+        if len(historical)!=len(payload):raise ValueError('Historical/forecast point count mismatch')
+        combined=[]
+        for past,current in zip(historical,payload):
+            hourly={}
+            for key in ('time','precipitation','total_column_integrated_water_vapour'):
+                hourly[key]=past['hourly'][key]+current['hourly'][key]
+            combined.append({'hourly':hourly})
+        payload=combined
+
     if not isinstance(payload,list) or len(payload) != len(c.BASIN_POINTS):
         raise ValueError('Expected all nine weather responses')
     expected_hours = pd.date_range(meta['weather_start'],pd.Timestamp(meta['weather_end'])+pd.Timedelta(hours=23),freq='h')
@@ -66,6 +78,8 @@ def rebuild(snapshot):
                    forecast_max_discharge_m3_s=float(forecast.discharge_m3_s.max()) if forecast.discharge_m3_s.notna().any() else None,
                    weather_model='gfs_seamless',flood_model='seamless_v4',risk_1d=None,risk_3d=None,
                    status='inputs_only',missing_weather_values=int(weather[['precip_mm','tcwv_mm']].isna().sum().sum()))
+    if not full_history:
+        weather=weather.loc[today-pd.Timedelta(days=14):]
     return weather,summary
 
 
@@ -75,13 +89,13 @@ def poll():
     snapshot_id = now.strftime('%Y%m%dT%H%M%S_%fZ')
     path = SNAPSHOTS/snapshot_id
     path.mkdir(parents=True)
-    start = str((today-pd.Timedelta(days=14)).date())
+    start = str((today-pd.Timedelta(days=27)).date())
     end = str((today+pd.Timedelta(days=7)).date())
     weather_end = str((today+pd.Timedelta(days=8)).date())
     weather_params = dict(latitude=','.join(str(x[0]) for x in c.BASIN_POINTS),
                           longitude=','.join(str(x[1]) for x in c.BASIN_POINTS),
                           hourly='precipitation,total_column_integrated_water_vapour',models='gfs_seamless',
-                          timezone=c.TIMEZONE,start_date=start,end_date=weather_end)
+                          timezone=c.TIMEZONE,start_date=str((today-pd.Timedelta(days=14)).date()),end_date=weather_end)
     lat,lon = c.GLOFAS_POINTS[c.GLOFAS_CHOSEN]
     flood_params = dict(latitude=lat,longitude=lon,daily='river_discharge',models='seamless_v4',
                         start_date=start,end_date=end,timezone='GMT')
@@ -90,6 +104,7 @@ def poll():
                 timezone=c.TIMEZONE,glofas_day_timezone='UTC',glofas_chosen=c.GLOFAS_CHOSEN,
                 basin_points=c.BASIN_POINTS,requests={
                     'weather':dict(url='https://api.open-meteo.com/v1/forecast',params=weather_params),
+                    'weather_history':dict(url=c.GFS_HISTORY_URL,params={**weather_params,'start_date':start,'end_date':str((today-pd.Timedelta(days=15)).date())}),
                     'flood':dict(url='https://flood-api.open-meteo.com/v1/flood',params=flood_params)})
     (path/'manifest.json').write_text(json.dumps(meta,indent=2))
     try:
@@ -104,6 +119,8 @@ def poll():
         meta['response_hashes'] = hashes
         (path/'manifest.json').write_text(json.dumps(meta,indent=2))
         frame,summary = rebuild(path)
+        from floodwatch.operational.live import save_score
+        save_score(path)
         frame.to_csv(path/'daily.csv')
         (path/'summary.json').write_text(json.dumps(summary,indent=2))
         with sqlite3.connect(DB) as db:

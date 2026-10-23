@@ -12,8 +12,10 @@ def observed_view(snapshot):
 
 
 def render_observed():
-    st.header('Observed river level — DHM Khokana gauge')
-    if st.button('Refresh observed gauge',key='refresh_observed_dhm'):
+    st.header('River level (measured at Khokana)')
+    from floodwatch.dashboard.plain_language import caption
+    st.caption('Technical source: DHM station 550.05; gauge height in metres.')
+    if st.button('Refresh gauge',key='refresh_observed_dhm'):
         try:
             with st.spinner('Reading the public DHM gauge…'):
                 poll_observed()
@@ -29,9 +31,11 @@ def render_observed():
             latest=pd.Timestamp(summary['latest_time_nepal'])
             age=(pd.Timestamp.now(tz='UTC')-pd.Timestamp(summary['latest_time_utc'])).total_seconds()/3600
             cols=st.columns(3)
-            cols[0].metric('Observed water level',f"{summary['latest_water_level_m']:.3f} m")
-            cols[1].metric('DHM warning level',f"{summary['warning_level_m']:.2f} m" if summary['warning_level_m'] is not None else 'Not published')
-            cols[2].metric('DHM danger level',f"{summary['danger_level_m']:.2f} m" if summary['danger_level_m'] is not None else 'Not published')
+            cols[0].metric('River level (measured at Khokana)',f"{summary['latest_water_level_m']:.3f} m")
+            cols[1].metric('Warning river level',f"{summary['warning_level_m']:.2f} m" if summary['warning_level_m'] is not None else 'Not published')
+            cols[2].metric('Danger river level',f"{summary['danger_level_m']:.2f} m" if summary['danger_level_m'] is not None else 'Not published')
+            for card in cols:
+                with card:caption('Measured river height and published warning/danger levels.','Compare the latest height with these levels; metres are not the same as river flow.','DHM Khokana saved observations')
             st.write(f'Latest observation: **{latest:%Y-%m-%d %H:%M} Nepal time** · age {age:.1f} hours. Fetched {summary["fetched_at"]}.')
             if age>3:
                 st.warning('The latest saved gauge observation is more than three hours old. Refresh before interpreting it as current.')
@@ -49,6 +53,7 @@ def render_observed():
                     layers += [ref.mark_rule(color=color,strokeDash=[5,3]).encode(y='level:Q'),
                                ref.mark_text(align='right',baseline='bottom',dy=-4,color=color).encode(x=alt.value('width'),y='level:Q',text='label:N')]
             st.altair_chart(alt.layer(*layers).properties(height=280),width='stretch')
+            caption('Measured river height over the saved seven-day window.','The warning and danger lines mark published levels; gaps mean missing observations.','DHM Khokana gauge; hourly means of ten-minute readings, metres')
             st.caption('DHM station 550.05, series 927. The public seven-calendar-day window is shown as hourly means of ten-minute readings; the latest/first hours may be partial. Missing hours stay missing; no interpolation. The latest metric is the latest raw reading, not an hourly average. Gauge level in metres is not GloFAS discharge in m³/s and is not fed to the frozen models.')
             with st.expander('Observed gauge hourly data and source'):
                 table=hourly.reset_index();table['hour']=table.hour.dt.strftime('%Y-%m-%d %H:%M')

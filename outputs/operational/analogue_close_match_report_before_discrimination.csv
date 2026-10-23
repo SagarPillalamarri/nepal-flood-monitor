@@ -1,0 +1,20 @@
+date,analogue,distance,close_match_cutoff,is_close_match,label,nearest_note
+2024-09-20,research,6.798041718549237,7.447261284951323,True,Resembles the run-up to the 2011-07-01 flood (6 days before onset),
+2024-09-21,research,6.606156605501895,7.447261284951323,True,Resembles the run-up to the 2011-07-01 flood (5 days before onset),
+2024-09-22,research,6.700733578083702,7.447261284951323,True,Resembles the run-up to the 2011-07-01 flood (4 days before onset),
+2024-09-23,research,7.323719085532524,7.447261284951323,True,Resembles the run-up to the 2011-07-01 flood (4 days before onset),
+2024-09-24,research,7.801133585636141,7.447261284951323,False,No close match to any past flood run-up,"nearest: 2011-07-01, not a close match"
+2024-09-25,research,7.878015290854112,7.447261284951323,False,No close match to any past flood run-up,"nearest: 2011-07-01, not a close match"
+2024-09-26,research,7.326143267343622,7.447261284951323,True,Resembles the run-up to the 2020-09-23 flood (9 days before onset),
+2024-09-27,research,7.331093141954558,7.447261284951323,True,Resembles the run-up to the 2020-09-23 flood (8 days before onset),
+2024-09-28,research,9.31453449777684,7.447261284951323,False,No close match to any past flood run-up,"nearest: 2020-07-10, not a close match"
+2024-09-20,operational,4.031820185457422,6.177606292510894,True,Resembles the run-up to the 2011-07-01 flood (5 days before onset),
+2024-09-21,operational,4.014897492021947,6.177606292510894,True,Resembles the run-up to the 2011-07-01 flood (5 days before onset),
+2024-09-22,operational,4.128984088879711,6.177606292510894,True,Resembles the run-up to the 2011-07-01 flood (4 days before onset),
+2024-09-23,operational,4.358654796407215,6.177606292510894,True,Resembles the run-up to the 2011-07-01 flood (4 days before onset),
+2024-09-24,operational,4.641107778294598,6.177606292510894,True,Resembles the run-up to the 2014-08-14 flood (2 days before onset),
+2024-09-25,operational,4.972702436695104,6.177606292510894,True,Resembles the run-up to the 2011-07-01 flood (2 days before onset),
+2024-09-26,operational,4.973504565773562,6.177606292510894,True,Resembles the run-up to the 2011-07-01 flood (2 days before onset),
+2024-09-27,operational,5.234753781888645,6.177606292510894,True,Resembles the run-up to the 2011-07-01 flood (1 days before onset),
+2024-09-28,operational,8.501247006921037,6.177606292510894,False,No close match to any past flood run-up,"nearest: 2011-07-01, not a close match"
+2026-10-22,live,4.670422781276713,6.177606292510894,True,Resembles the run-up to the 2009-07-29 flood (5 days before onset),

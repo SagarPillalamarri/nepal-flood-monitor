@@ -1,0 +1,24 @@
+{
+  "model": "gfs_seamless",
+  "monsoon_months": [
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "era5_reference": [
+    "2001-01-01",
+    "2019-12-31"
+  ],
+  "gfs_reference": [
+    "2021-06-01",
+    "2025-10-31"
+  ],
+  "local_timezone": "Asia/Kathmandu",
+  "rain_hours": "01:00 through next-day 00:00",
+  "tcwv_hours": "00:00 through 23:00",
+  "n_basin_points": 9,
+  "frozen_entries_verified": 80,
+  "operational_training_permitted": false
+}

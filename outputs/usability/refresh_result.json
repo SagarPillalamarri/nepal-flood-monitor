@@ -1,0 +1,7 @@
+{
+  "errors": [
+    "DHM gauge: HTTPSConnectionPool(host='dhm.gov.np', port=443): Max retries exceeded with url: /hydrology/hms-Single/50 (Caused by ConnectTimeoutError(<HTTPSConnection(host='dhm.gov.np', port=443) at 0x15a6d3c50>, 'Connection to dhm.gov.np timed out. (connect timeout=60)'))"
+  ],
+  "snapshot_id": "20261022T170416_701938Z",
+  "panel_time": "2026-10-22T17:05:21.079942+00:00"
+}

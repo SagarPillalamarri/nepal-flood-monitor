@@ -36,6 +36,10 @@ def main(snapshot=None):
             for name,digest in meta['response_hashes'].items():
                 assert sha(snapshot/name)==digest
             payload=json.loads((snapshot/'weather.json').read_text())
+            if (snapshot/'weather_history.json').exists():
+                history=json.loads((snapshot/'weather_history.json').read_text())
+                payload=[{'hourly':{key:a['hourly'][key]+b['hourly'][key] for key in ('time','precipitation','total_column_integrated_water_vapour')}} for a,b in zip(history,payload)]
+
             expected=[]
             for day in frame.index:
                 rains=[];vapour=[]
@@ -68,7 +72,7 @@ def main(snapshot=None):
             assert forecast.discharge_m3_s.notna().all(), 'A future GloFAS day is missing'
             flood=json.loads((snapshot/'flood.json').read_text())['daily']
             expected=pd.Series(flood['river_discharge'],index=pd.to_datetime(flood['time']),dtype=float)
-            np.testing.assert_allclose(frame.discharge_m3_s,expected,rtol=0,atol=1e-12,equal_nan=True)
+            np.testing.assert_allclose(frame.discharge_m3_s,expected.reindex(frame.index),rtol=0,atol=1e-12,equal_nan=True)
             dates=forecast.index[forecast.discharge_m3_s>THRESHOLD].strftime('%Y-%m-%d').tolist()
             assert dates==summary['exceedance_dates']
             assert tab==summary and THRESHOLD==445.191
@@ -147,23 +151,23 @@ def main(snapshot=None):
             assert [x.label for x in app.tabs]==['September 2024 replay','Big data pipeline','Live monitor']
             assert not app.tabs[2].error
             assert app.button(key='fetch_live_inputs').label=='Fetch now'
-            assert app.button(key='refresh_observed_dhm').label=='Refresh observed gauge'
+            assert app.button(key='refresh_observed_dhm').label=='Refresh gauge'
             for table in app.tabs[2].dataframe:
                 if 'discharge_m3_s' in table.value and 'period' in table.value:
                     pd.testing.assert_frame_equal(table.value,frame.reset_index(),check_dtype=False)
                     break
             else:
                 raise AssertionError('Rendered daily input table missing')
-            with patch('floodwatch.dashboard.live_monitor.poll',return_value=snapshot) as poll, patch('floodwatch.dashboard.live_monitor.latest',return_value=snapshot):
+            with patch('floodwatch.dashboard.live_monitor.poll',return_value=snapshot) as poll, patch('floodwatch.dashboard.live_monitor.latest',return_value=snapshot), patch('floodwatch.live.observed_poll.poll_observed') as gauge_poll:
                 app.button(key='fetch_live_inputs').click().run(timeout=45)
-                assert poll.call_count==1
+                assert poll.call_count==1 and gauge_poll.call_count==1
                 assert not app.exception
             from floodwatch.live.observed_poll import latest_observed
             with patch('floodwatch.dashboard.observed_monitor.poll_observed',return_value=latest_observed()) as observed_poll:
                 app.button(key='refresh_observed_dhm').click().run(timeout=45)
                 assert observed_poll.call_count==1
                 assert not app.exception
-            assert any(m.label=='Observed water level' for m in app.tabs[2].metric)
+            assert any(m.label=='River level (measured at Khokana)' for m in app.tabs[2].metric)
             return 'All three tabs render offline; model/observed displays reproduce snapshots; both fetch buttons invoke their pollers (mocked)'
         check('Streamlit rendering and button',ui_check)
     out=c.ROOT/'outputs/live';out.mkdir(exist_ok=True)

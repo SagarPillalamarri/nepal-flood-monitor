@@ -358,3 +358,72 @@ venv/bin/streamlit run app.py
 ### Historical DHM gauge validation — formal request needed
 
 A bounded optional probe of the same public Khokana endpoint returned HTTP 200 / success but **zero observations** for a seven-day window anchored at 2024-10-02 (covering the September flood) and for hourly data on 2024-09-28. Only two historical data requests were made. The page accepts past dates, but historical observations were not available for these tested periods; no conclusion about warning/danger crossing can be drawn. Further 2020–2021 event queries were skipped. Live current gauge access is unaffected. Next step: a formal DHM historical-data request for station 550.05, covering 20 September–5 October 2024 and ±2 days around the six test onsets, including timestamps/timezone, datum/units, quality flags and contemporaneous thresholds. No request was submitted and no models, labels, features or dashboard content changed. See `outputs/dhm_validation.md` and raw evidence in `data/dhm_history/`.
+
+## Separate operational model — calibration stopped (22 October 2026)
+
+The requested GFS percentile transfer calibration was completed before attempting operational training. On the 765 June–October days in 2021–2025, basin rainfall percentile correlation against ERA5 is **0.475010**, below the required 0.5 stop threshold. No operational model, analogue, SQLite scoring or dashboard scoring was built. Accepted research models and results remain unchanged.
+
+GFS TCWV additionally has incomplete coverage: 0/153 monsoon days in each of 2021, 2022 and 2023; 59/153 in 2024; 153/153 in 2025. Its diagnostic percentile correlation is **0.786627** over 198 days with sufficient seasonal-reference samples. Another 14 otherwise available days have fewer than the existing minimum of 30 seasonal samples and remain unranked. This is not a complete five-year TCWV climatology. No values were filled and the minimum-sample rule was not relaxed.
+
+The calibration uses all nine basin points, complete hourly days, the existing one-hour precipitation accumulation alignment and the unchanged shared seasonal percentile function. ERA5 reference: monsoon 2001–2019. GFS reference: available monsoon values in the requested 2021–2025 range. May 18 onward was downloaded to support trailing rainfall warm-up. Raw requests/responses are cached locally in `data/raw/operational_gfs/`; daily values, reference distributions, correlations and checks are saved in `outputs/operational/`. Rerunning `python -m floodwatch.operational.calibration` reuses these caches. All 80 original frozen-artifact manifest entries were verified.
+
+## Operational transfer follow-up
+
+Fixed follow-up rules permit TCWV (2025 out-of-sample mapped-percentile correlation 0.865766; mapping fitted on 59 overlapping 2024 days) and rain 7-/14-day percentiles (0.514342/0.509331, usable with warnings). Rain 1-/3-day inputs are dropped. Separate operational XGBoost models use these three inputs plus GloFAS discharge and 1-/3-day rises, with the original chronological training folds and ongoing-flood exclusion. Saved research artifacts remain frozen. Results and checks are in `outputs/operational/`. Operational model training is complete; these new models are not yet connected to the live dashboard, SQLite scoring or a new operational analogue. The earlier calibration stop describes the superseded initial gate; follow-up rules are recorded here.
+
+## Operational live loop (22 October 2026)
+
+The operational model files and thresholds are frozen. A live-only TCWV mapping was refitted on all 212 complete overlapping monsoon days in 2024–2025 and saved to `data/live/quantile_maps/tcwv_gfs_era5.json`. The original 2024-fit/2025-test correlation remains 0.865766. The refit changes 2025 mapped ERA5 percentiles by 9.07455 points on average and 37.52122 points at maximum. Mapping uses the original 101 empirical quantile knots with linear interpolation and endpoint clipping; the 212-day refit is never used for reported historical scores.
+
+The separate operational analogue uses 14-day Euclidean windows of TCWV percentile, rain 7-/14-day percentiles and discharge 1-/3-day rise. Scaling uses 2001–2019 monsoon rows. Leave-one-event-out excludes held-event windows and templates: 7/38 hits (18.4%), versus research 12/38 (31.6%). September diagnostics use pre-2024 templates only. Neither analogue is a flood countdown prediction.
+
+Each `python -m floodwatch.live.live_poll` fetch now saves 27 days of warm-up weather/discharge plus today and seven future days. Historical Forecast API GFS supplies the first 13 warm-up days, while Forecast API GFS supplies the final 14 days plus today and the forecast, because the Forecast endpoint returned nulls for older warm-up dates. Both exact responses are retained in the snapshot. The dashboard charts continue showing the original past-14-day plus seven-day range. Hourly timestamps/lengths are checked, all nine points must have complete days, and no missing values are filled.
+
+Operational scores and feature values, thresholds, analogue match, snapshot ID and fetch time are saved to the separate `operational_scores` table in `data/live/live_scores.sqlite`, and to `operational_score.json` in the same raw snapshot. Legacy `runs` records keep their inputs-only schema and null research-risk fields. `operational_provenance.json` pins the raw response, mapping, reference, analogue, model and threshold hashes. Live score rows outside the monsoon are unavailable; ongoing flood days (GloFAS >445.191 m³/s) are unscored. Today's weather includes forecast hours. The score is experimental and is not a probability.
+
+Live monitor retains the observed DHM gauge at the top, then operational score cards and the closest past event, then existing forecast charts. Historical replay and Big data tabs are unchanged. Run `python -m floodwatch.operational.check_live` for network-free snapshot, feature identity, causality, frozen hash, SQLite and Streamlit checks. A fresh clone must prepare the local mapping/analogue artifacts with `python -m floodwatch.operational.prepare_live` and fetch a new snapshot; preparation does not train or retune models. Existing historical reports retain original source filenames and previously reported values.
+
+## Analogue close-match labels
+
+Research cutoff: 7.447261284951323; operational cutoff: 6.177606292510894. These are the linearly interpolated 75th percentiles of distances for hits in the existing 2001–2019 LOEO runs (research selected 14-day window: 12 hits; operational: 7 hits). Operational distances were reconstructed using the original held-event exclusions and scaling, because its saved LOEO CSV did not include distances; saved assignments and hit results were retained. No test, September or live rows enter cutoff estimation. Constants and derivation comments are in `floodwatch/core/analogue_config.py`.
+
+A finite distance <= its cutoff is labelled “Resembles the run-up to the <date> flood (N days before onset)”; all others say “No close match to any past flood run-up”, with the nearest event in a muted caption when available. Missing windows never qualify. The Replay and Live monitor tables expose distance, cutoff, close-match flag and text. `outputs/stage5/labelled_september_2024_replay.csv` and `outputs/operational/analogue_close_match_report.csv` save the annotated results. Existing operational SQLite/snapshot records were annotated without changing their model scores, feature values, nearest-event assignments or distances; pre-annotation JSON copies remain alongside snapshots. All future fetches store these labels and pin the cutoff config hash in provenance. Models, score thresholds and analogue templates/scalers remain frozen.
+
+## Current analogue display decision — negative discrimination finding
+
+
+All selection quantities use 2001–2019 monsoon days, frozen scalers and existing training-event templates. The tested window is fixed at 14 days. Pre-flood queries are onset-1 through onset-7 and exclude their own event from candidate templates. A hit requires both distance <= cutoff and matched template lead 1–3, retaining the earlier hit definition. No test, September or live rows set anything.
+
+Ordinary days exclude onset-14 through onset+7 around every training-period onset. There are 2,505 ordinary queries: 2,262 complete windows and 243 incomplete windows. Distance quantiles use complete windows; false-match rates use all ordinary queries, with incomplete windows counted as no match. All 133 pre-flood queries are complete.
+
+| Analogue | Group | Median | P10 | P90 |
+|---|---|---:|---:|---:|
+| research | ordinary | 6.311239 | 4.911395 | 8.453109 |
+| research | pre_flood | 6.343480 | 4.554046 | 9.790957 |
+| operational | ordinary | 4.841338 | 3.651647 | 7.530398 |
+| operational | pre_flood | 4.994261 | 3.685617 | 8.038792 |
+
+| Analogue | Old false-match rate | New cutoff | New false-match rate | Pre-flood hits | Distance-only pre-flood coverage |
+|---|---:|---:|---:|---:|---:|
+| research | 70.34% | 4.967996365959 | 9.98% (250/2505) | 4/133 (3.01%) | 16.54% |
+| operational | 70.54% | 3.68583445160981 | 9.98% (250/2505) | 5/133 (3.76%) | 10.53% |
+
+The cutoff is the largest representable floating-point number below the first disallowed ordinary distance, accounting for ties. At the next representable float, the ordinary false-match rate exceeds 10%. Neither hit rate reaches 25%; both resemblance displays are disabled. Even distance-only pre-flood coverage is below 25%. The matching procedure does not discriminate flood run-ups from ordinary conditions adequately at the stipulated false-match rate. Distances and nearest matches remain in SQLite and reports for audit.
+
+Both labels now read: **Pattern matching not reliable enough to display (see README)**. Model scores, thresholds, templates and scalers remain unchanged. Earlier cutoff sections in README describe superseded historical steps.
+
+## Plain-language dashboard and Precursor check
+
+Every tab has a short introduction and glossary, with plain names for moisture, modelled flow, measured river level and risk scores. All eight chart call sites and all 17 rendered metric cards have “What it shows / How to read it / Source” captions. Scientific values, models, score thresholds and existing feature calculations are unchanged.
+
+The new Live monitor Precursor check reads only the latest saved operational feature values, saved DHM observation and 2001–2019 statistics. Water-vapour band rates (<90, 90–95, ≥95) are derived from disjoint counts using the existing Stage 2 all-monsoon-day, three-day conditional-probability table: subtract ≥90 from all for <90, and subtract ≥95 from ≥90 for 90–95. These frequencies are historical associations, not live forecast probabilities. No new band model is fitted. Rain labels use the requested 75/95 boundaries. Flow rank uses the existing seasonal midrank function on q_north 2001–2019 monsoon values within ±15 calendar days, and the exact fixed 445.191 m³/s level. Gauge percentage uses the saved measured height divided by the published warning height and explicitly retains its separate observation timestamp.
+
+Fixed summary rules give the model alert precedence, followed by very moist air, no active weather signs, then some above-normal signals; the existing inclusive score >= threshold comparison is retained. Missing water-vapour data yields an unavailable panel rather than a false reassuring summary. “No warning signs active” refers only to these defined indicators and is not an official all-clear. The Fetch now button rerenders the whole page so the panel and score cards use the same new snapshot.
+
+Run `python -m floodwatch.checks.dashboard_language_check` for offline numeric provenance, chart/metric captions, introduction/glossary and frozen data checks. `outputs/usability/precursor_today.txt` records the exact panel text from the verification snapshot.
+
+## Precursor panel polish
+
+Gauge freshness is measured against the panel's UTC rendering time (shown in the panel), not against the older weather-fetch timestamp. A reading strictly more than six hours older produces the visible “Gauge reading is … old. Press Refresh gauge.” warning and the summary suffix “(gauge reading out of date)”. The main Fetch now button attempts both the weather/flow and public DHM gauge refresh independently; a failure keeps that source's last saved reading and shows a refresh warning.
+
+The panel always includes the ≥95th-percentile training comparison from the same all-monsoon-day, three-day conditional table (8/81 = 9.876543209876543%). Whole-number percentiles and gauge percentages, one-decimal flow, approximate whole-number distance to the fixed flood level, and one-decimal flow-as-percentage of that level are presentation formatting only. Snapshot, SQLite and panel JSON retain full precision. The existing data-hash check excludes only the runtime SQLite database and latest-observation pointer, because a requested real fetch appends new runs and updates that pointer; historical snapshots, research data and model/template files remain byte-for-byte protected.
